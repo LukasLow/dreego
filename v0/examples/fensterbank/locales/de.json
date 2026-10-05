@@ -1,0 +1,22 @@
+{
+  "nav.start": "Start",
+  "nav.sorten": "Sorten",
+  "nav.pflege": "Pflege",
+  "nav.kontakt": "Kontakt",
+  "nav.shop": "Shop",
+  "nav.anmelden": "Anmelden",
+  "start.titel": "Pflanzen, die überleben.",
+  "start.lead": "Fensterbank zeigt dir genügsame Zimmerpflanzen und ihre Pflege.",
+  "start.beliebt": "Beliebte Sorten",
+  "sorten.titel": "Sorten",
+  "sorten.lead": "Vier genügsame Pflanzen — jede mit eigener Detailseite.",
+  "sorte.nichtgefunden": "Sorte nicht gefunden",
+  "sorte.zurueck": "Zurück zur Übersicht",
+  "sorte.pflege": "Zur Pflege-Anleitung",
+  "pflege.titel": "Pflege",
+  "kontakt.titel": "Kontakt",
+  "kontakt.lead": "Schreib uns an",
+  "fuss": "Fensterbank — eine erfundene Multi-Seiten-Demo mit dreego.",
+  "fehler.404.titel": "Nicht gefunden",
+  "fehler.404.text": "Diese Seite gibt es nicht (mehr). Vielleicht findest du sie über die Sorten-Übersicht."
+}

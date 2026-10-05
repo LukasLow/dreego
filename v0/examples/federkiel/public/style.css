@@ -1,0 +1,51 @@
+/* Federkiel — zentrale Basis-Styles (geteilt, darum zentral). */
+/* Atkinson Hyperlegible ist die Hauptschrift (Low-Vision-freundlich,
+   bewusst nicht nur Systemschrift). Dateien liegen co-lokal unter public/fonts/. */
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/public/fonts/atkinson-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/public/fonts/atkinson-700.woff2") format("woff2");
+}
+:root {
+  --tinte: #14110d;
+  --papier: #fffdf7;
+  --feder: #b4451f;
+  --feder-dunkel: #7c2f15;
+  --linie: #e2d9c8;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font: 18px/1.65 "Atkinson Hyperlegible", Georgia, "Times New Roman", serif;
+  color: var(--tinte);
+  background: var(--papier);
+}
+a { color: var(--feder-dunkel); }
+main { max-width: 900px; margin: 0 auto; padding: 0 22px; }
+.sitenav {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; padding: 16px 26px; border-bottom: 2px solid var(--linie);
+  flex-wrap: wrap;
+}
+.sitenav .brand { font-weight: 700; font-size: 22px; text-decoration: none; color: var(--tinte); }
+.sitenav .brand em { color: var(--feder); font-style: normal; }
+.sitenav nav { display: flex; gap: 18px; align-items: center; }
+.sitenav a { text-decoration: none; }
+.sitenav a.on { text-decoration: underline; text-underline-offset: 4px; }
+footer { border-top: 2px solid var(--linie); margin-top: 40px; padding: 18px 26px; font-size: 14px; color: #6b6152; }
+.btn {
+  display: inline-block; font: inherit; font-weight: 700; cursor: pointer;
+  padding: 11px 20px; border-radius: 10px; text-decoration: none;
+  background: var(--feder); color: #fff; border: none;
+}
+.btn:hover { background: var(--feder-dunkel); }
+.btn.ghost { background: transparent; color: var(--feder-dunkel); border: 2px solid var(--feder); }

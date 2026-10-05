@@ -1,0 +1,7 @@
+# Build-Artefakte
+/dreego-demo
+*.exe
+
+# Generierte Demo-Ausgabe
+_demo_*.html
+example/_out.html

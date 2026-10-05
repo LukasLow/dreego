@@ -1,0 +1,4 @@
+# Build-Artefakte und lokale Ausgaben nicht ins Image kopieren.
+example/_out.html
+*.exe
+dreego-demo

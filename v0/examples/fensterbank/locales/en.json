@@ -1,0 +1,22 @@
+{
+  "nav.start": "Home",
+  "nav.sorten": "Species",
+  "nav.pflege": "Care",
+  "nav.kontakt": "Contact",
+  "nav.shop": "Shop",
+  "nav.anmelden": "Sign in",
+  "start.titel": "Plants that survive.",
+  "start.lead": "Fensterbank shows you easy-care houseplants and how to look after them.",
+  "start.beliebt": "Popular species",
+  "sorten.titel": "Species",
+  "sorten.lead": "Four easy plants — each with its own page.",
+  "sorte.nichtgefunden": "Species not found",
+  "sorte.zurueck": "Back to the list",
+  "sorte.pflege": "To the care guide",
+  "pflege.titel": "Care",
+  "kontakt.titel": "Contact",
+  "kontakt.lead": "Write to us at",
+  "fuss": "Fensterbank — a fictional multi-page demo built with dreego.",
+  "fehler.404.titel": "Not found",
+  "fehler.404.text": "This page does not exist (any more)."
+}
