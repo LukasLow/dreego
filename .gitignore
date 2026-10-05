@@ -5,3 +5,6 @@
 # Generierte Demo-Ausgabe
 _demo_*.html
 example/_out.html
+
+# Referenz-Vergleiche (read-only, nicht Teil des Repos)
+.tmp/

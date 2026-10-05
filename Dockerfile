@@ -1,6 +1,6 @@
 # dreego Demo — Multi-Stage-Build, ein statisches Binary.
 #
-# Das Go-Modul liegt unter v0/ (Modulpfad github.com/LukasLow/dreego/v0).
+# Das Go-Modul liegt im Repo-Root (module github.com/LukasLow/dreego).
 # Die Beispiele liegen unter v0/examples/<name>.
 #
 # Build:  docker build -t dreego-demo .
@@ -12,13 +12,13 @@ FROM golang:1.24-alpine AS bauen
 WORKDIR /src
 
 # Nur die Modul-Dateien zuerst (Layer-Cache für Abhängigkeiten).
-COPY v0/go.mod v0/go.sum ./
-RUN go mod download
+COPY go.mod ./
+RUN go mod download || true
 
 # Quellcode.
-COPY v0/ .
+COPY . .
 
-ARG CMD=./examples/fensterbank
+ARG CMD=./v0/examples/fensterbank
 RUN CGO_ENABLED=0 go build -o /dreego-demo ${CMD}
 
 FROM alpine:3.20

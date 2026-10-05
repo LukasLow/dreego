@@ -26,7 +26,7 @@ github.com/LukasLow/dreego/          (Repo-Root)
     └── examples/     Demo-Sites (fensterbank, portal, www, federkiel) — main
 ```
 
-Spätere Adapter (z. B. `v0/pkg/adapters/wails`) liegen in `pkg/` daneben.
+Spätere Adapter (z. B. für Desktop-Hosts) liegen in `v0/plg/` daneben.
 
 **Tag-Konvention:** Da `go.mod` in `v0/` liegt, heißt der Release-Tag
 `v0/v0.0.1`. Der Import ist `github.com/LukasLow/dreego/v0/pkg/dreego`.

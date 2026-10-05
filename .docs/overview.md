@@ -27,7 +27,7 @@ den Generator weg: alles ist normales Go.
 
 - Keinen `.dreego`-Transpiler und kein `generate`.
 - Keine TypeScript- oder Lua-Client-Sprache.
-- Keinen Desktop-Adapter (Wails) — spätere Phase.
+- Keinen Desktop-Adapter — spätere Phase.
 - Kein Tailwind, keine Utility-CSS-Frameworks.
 
 ## Abgrenzung

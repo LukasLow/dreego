@@ -10,7 +10,7 @@ services:
     build:
       context: .
       args:
-        CMD: ./examples/fensterbank
+        CMD: ./v0/examples/fensterbank
     command: ["-port", "4000"]
     ports:
       - "4000:4000"
@@ -23,7 +23,7 @@ services:
     build:
       context: .
       args:
-        CMD: ./examples/portal
+        CMD: ./v0/examples/portal
     command: ["-port", "4001"]
     ports:
       - "4001:4001"

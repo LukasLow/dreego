@@ -117,4 +117,4 @@ Sichere Vorgaben sind **Defaults**, keine Fesseln: jede lässt sich bewusst
 
 - Ein **Audit-Log** für Security-Ereignisse fehlt noch.
 - **Subresource Integrity (SRI)** für externe Assets fehlt.
-- **Wails/Desktop** als eigener Adapter (braucht die CSP-Steuerung, die es nun gibt).
+- **Desktop-Adapter** als eigener Adapter (braucht die CSP-Steuerung, die es nun gibt).
