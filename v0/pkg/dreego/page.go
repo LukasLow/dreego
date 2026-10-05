@@ -34,6 +34,9 @@ type APIHandler func(c *Ctx) error
 // Get and Post select the HTTP method for an HTML page. API turns the page into
 // a non-HTML endpoint instead (no layout, no render). When Middleware is set, it
 // wraps only this page.
+//
+// Security overrides the app-wide security policy for this page (nil = app
+// default). See Security and SetSecurity.
 type Page struct {
 	Path       string
 	Layout     Layout
@@ -44,6 +47,7 @@ type Page struct {
 	API        APIHandler
 	Methods    []string
 	Middleware []func(http.Handler) http.Handler
+	Security   *Security
 }
 
 // methods lists the HTTP methods this page answers. An explicit Methods list

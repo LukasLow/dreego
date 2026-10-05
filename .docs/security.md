@@ -12,7 +12,10 @@ dreego ist auf sichere Vorgaben ausgelegt: die wichtigen Schutzmaßnahmen sind
 
 ## Content-Security-Policy + Nonce
 
-Jede Antwort trägt eine strenge CSP:
+Jede Antwort trägt standardmäßig eine strenge CSP. Sie ist **deklarativ** und
+**überschreibbar** — wie ein `Page`-Feld, in drei Ebenen:
+
+**1. Eingebauter Default** (streng, mit Nonce):
 
 ```
 default-src 'self';
@@ -22,13 +25,36 @@ img-src 'self' data:;
 base-uri 'none'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
 ```
 
-- `'self'` erlaubt eigene statische Dateien (`/public/app.js`).
-- Der **Nonce** erlaubt dreego's eigene inline `<style>`/`<script>` (Scoped
-  CSS/JS, Critical CSS).
-- **Inline-Style-Attribute** (`style="…"`) sind **blockiert** — deshalb nie
-  verwenden (siehe [components.md](components.md)).
-- Ein fehlender Nonce (crypto/rand-Ausfall) → **500**, keine Seite mit
-  blockierten Assets.
+**2. App-weit** über `app.SetCSP(...)` (oder `app.SetSecurity(Security{CSP: …})`):
+
+```go
+app.SetCSP("default-src 'self'; script-src 'self' 'nonce-{nonce}' https://cdn.example")
+```
+
+**3. Pro Seite** über das `Security`-Feld an `Page`:
+
+```go
+var Report = dreego.Page{
+	Path: "/report",
+	Security: &dreego.Security{
+		CSP: "default-src 'self'; script-src 'self' 'nonce-{nonce}' https://trusted.example",
+	},
+	Get: getReport,
+}
+```
+
+**Platzhalter:** `{nonce}` wird pro Request durch den echten Nonce ersetzt.
+
+**Abschalten:** `CSPOff` ("off") auf App- oder Seitenebene.
+
+**Reihenfolge:** Seite → App → Default. So bleibt der Default sicher, aber jede
+echte Seite kann ihre Policy deklarieren (z. B. eine Seite mit externem Widget).
+
+Ein fehlender Nonce (crypto/rand-Ausfall) → **500**, keine Seite mit
+blockierten Assets.
+
+Für Inline-Style-**Attribute** (`style="…"`) gilt weiter: vermeiden — sie werden
+von `style-src 'nonce-…'` blockiert. Layout in eine gescopte CSS-Klasse.
 
 ## Security-Header (immer an)
 
@@ -74,8 +100,15 @@ geht nur ins Server-Log, nie an den Client.
 - Session-Schreibfehler → gemeldete `500`, kein stiller Logout.
 - Keine stillen Standardwerte.
 
-## Bewusst offen / spätere Phase
+## Was ein Nutzer abschalten/ändern kann
 
-- Ein **Audit-Log** für Security-Ereignisse fehlt noch.
-- **Subresource Integrity (SRI)** für externe Assets fehlt.
-- **Wails/Desktop** als eigener Adapter.
+| Sicherheits-Ding | Steuerung |
+|---|---|
+| CSRF | `app.SetCSRF(false)` |
+| Gzip | `app.SetCompress(false)` |
+| Session-Cookies | keinen Store setzen |
+| **CSP** | `app.SetCSP(...)` app-weit, `Page.Security` pro Seite, `CSPOff` aus |
+| Security-Header (nosniff, DENY, …) | noch **fest** (spätere Option) |
+
+Sichere Vorgaben sind **Defaults**, keine Fesseln: jede lässt sich bewusst
+ändern — mit klarer Ansage im Code.

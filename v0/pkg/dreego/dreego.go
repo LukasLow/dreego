@@ -44,6 +44,10 @@ type App struct {
 	i18n          *i18n.Bundle
 	localeDefault string
 
+	// security is the app-wide security policy (nil = strict default). A page
+	// may override it via Page.Security.
+	security *Security
+
 	// noCompress disables the built-in gzip middleware (default: compress on).
 	noCompress bool
 }
@@ -163,18 +167,12 @@ func (app *App) servePage(w http.ResponseWriter, r *http.Request, seite Page) {
 		collector := scope.New()
 		collector.SetNonce(nonce)
 
-		// Security default: a strict CSP. 'self' allows our own static files
-		// (e.g. /public/app.js), the nonce allows our inline component JS/CSS.
-		// Third-party scripts and inline code without a nonce are still blocked.
-		w.Header().Set("Content-Security-Policy",
-			"default-src 'self'; "+
-				"script-src 'self' 'nonce-"+nonce+"'; "+
-				"style-src 'self' 'nonce-"+nonce+"'; "+
-				"img-src 'self' data:; "+
-				"base-uri 'none'; "+
-				"form-action 'self'; "+
-				"frame-ancestors 'none'; "+
-				"object-src 'none'")
+		// Security policy: page -> app -> strict default. The {nonce}
+		// placeholder is filled per request.
+		csp := app.contentSecurityPolicy(seite, nonce)
+		if csp != "" {
+			w.Header().Set("Content-Security-Policy", csp)
+		}
 
 		ctx := newCtx(w, r, seite, app.store, app.csrf, nonce, collector, app.resolveLocale(r), app.i18n)
 
