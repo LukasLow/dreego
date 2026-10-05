@@ -43,10 +43,11 @@ z. B. `HowItWorksCards`, `FaqItem`. Das neue Modell kennt keine Slots.
 Aktuell: Kindinhalt als `d.View`-Argument übergeben.
 Zu entscheiden: reicht das, oder braucht dreego ein echtes Slot-System?
 
-### SVG-Helfer
-Es gibt nur `d.SVG` + generisches `d.El`/`d.Attr`; kein `Rect`, `Circle`,
-`Path`, `ViewBox`, `Stroke`, `ViewBox`, … Die Statuna-UI hat viele Inline-SVGs.
-Fix: `internal/gen_dom` um SVG-Elemente/-Attribute erweitern (mechanisch).
+### SVG-Helfer — ERLEDIGT (v0.0.3)
+`pkg/dom/svg.go` ergänzt `Circle`, `Rect`, `Path`, `G`, `Line`, `Polygon`,
+`Polyline`, `Ellipse`, `Defs`, `Use`, `TextPath` und die Attribute `ViewBox`,
+`Cx`, `Cy`, `R`, `D`, `Fill`, `Stroke`, `StrokeWidth`, `StrokeLinecap`,
+`StrokeLinejoin`, `StrokeDasharray`, `Transform`, `AriaLabel`, …
 
 ### `/ready`-Endpunkt
 Es gibt nur `/health`. Monitoring/Readiness braucht `/ready`.
