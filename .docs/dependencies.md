@@ -2,9 +2,13 @@
 
 ## dreego selbst
 
-dreego steht unter der **MIT-Lizenz** (siehe `LICENSE`). Du darfst es verwenden,
-ändern, weitergeben und kommerziell nutzen — nur der Copyright-Hinweis und der
-Lizenztext müssen erhalten bleiben.
+dreego steht unter der **MPL-2.0** (Mozilla Public License 2.0, siehe `LICENSE`).
+Schwaches Copyleft: Änderungen **an dreego selbst** müssen offen bleiben, deine
+Anwendung, die dreego *benutzt*, aber **nicht**.
+
+**MPL-2.0 + MIT ist kompatibel:** Der gomponents-Teil bleibt MIT, dreegos MPL
+gilt nur für dreegos eigene Dateien. Der MIT-Hinweis muss erhalten bleiben (siehe
+`THIRD_PARTY_NOTICES.md`).
 
 ## gomponents
 
@@ -36,12 +40,24 @@ forken und dessen Modulpfad ändern; das wäre unüblich.
 
 **Was MIT bedeutet für dich:**
 - ✅ Verwenden, ändern, weitergeben, verkaufen.
-- ✅ Kompatibel mit dreegos MIT-Lizenz.
+- ✅ Kompatibel mit dreegos MPL-2.0 (schwaches Copyleft).
 - ✅ **Keine Copyleft-Pflicht** — deine Anwendung muss **nicht** offen sein.
 - ⚠️ Der Copyright-Hinweis und Lizenztext müssen bleiben.
 
 Der vollständige Lizenztext von gomponents ist in **`THIRD_PARTY_NOTICES.md`**
 reproduziert (das verlangt die Lizenz).
+
+## Warum gomponents nicht geforkt wird
+
+dreego **forkt gomponents nicht** als ganzes Repo. Stattdessen übernimmt dreego
+nur den kleinen relevanten Teil (im Kern: der `Node`-Typ und die HTML-Helfer) in
+die eigene Form — über das Paket `dom`. So fühlt sich nichts wie eine fremde
+Bibliothek an, die danebensteht.
+
+gomponents bleibt dabei als **Starthilfe und Inspiration** genannt (MIT,
+Attribution in `THIRD_PARTY_NOTICES.md`). dreego ist **kein** Fork im engeren
+Sinn: Aufbau und Umfang sind eigenständig, die Abhängigkeit ist eine schmale
+Basis (~10 %).
 
 ## Warum Nutzer gomponents nie direkt importieren
 

@@ -64,6 +64,7 @@ Kein Build-Schritt. `go run .` und die Seite läuft.
 | Statisch | `go:embed`, eigene MIME-Map |
 | Markdown | Rechtstexte, sicher (kein Roh-HTML) |
 | Rate-Limiting | Token-Bucket-Addon |
+| Test-Helfer | `dreego-test`: Client + Assertions ohne Netzwerk |
 
 ## Aufbau
 
@@ -77,6 +78,7 @@ dreego/                            Repo-Root
     ├── pkg/dreego/                Framework (package dreego)
     ├── pkg/dom/                   re-exportiert gomponents — nie direkt importieren
     ├── pkg/{scope,ui,i18n,markdown,ratelimit,urls}/
+    ├── pkg/dreego-test/            Test-Client + Assertions
     └── examples/                  Demo-Sites (fensterbank :4000, portal :4001)
 ```
 
@@ -104,6 +106,10 @@ docker compose up -d --build
 
 ## Lizenz
 
-**MIT** (siehe [LICENSE](LICENSE)). dreego baut auf **gomponents**
-(https://github.com/maragudk/gomponents, **MIT**, gepinnt `v1.3.0`) — die
-Attribution steht in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+**MPL-2.0** (Mozilla Public License 2.0, siehe [LICENSE](LICENSE)) — schwaches
+Copyleft: dreego selbst (und Änderungen daran) bleibt offen, aber deine
+Anwendung, die dreego *benutzt*, muss **nicht** offen sein.
+
+dreego baut auf **gomponents** (https://github.com/maragudk/gomponents,
+**MIT**, gepinnt `v1.3.0`) — die Attribution steht in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

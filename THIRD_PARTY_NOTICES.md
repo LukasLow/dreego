@@ -25,8 +25,9 @@ never imports it directly.
 
 **MIT means:** you may use, copy, modify, merge, publish, distribute,
 sublicense and sell it, as long as the copyright notice and this license text
-stay included. It is compatible with dreego's own MIT license. There is no
-copyleft obligation: your application does not have to be open source.
+stay included. MIT (permissive) is compatible with dreego's own **MPL-2.0**
+(weak copyleft): the MIT part stays MIT, and dreego's MPL applies only to
+dreego's own files. There is no obligation to open your application.
 
 The full MIT text of gomponents is reproduced below, as the license requires.
 

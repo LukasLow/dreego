@@ -21,6 +21,7 @@ es aufgebaut ist, und wie man jede Fähigkeit benutzt.
 | [static.md](static.md) | `go:embed`, Content-Type, Cache |
 | [markdown.md](markdown.md) | Markdown-Seiten (Rechtstexte) |
 | [ratelimit.md](ratelimit.md) | Rate-Limiting-Addon |
+| [testing.md](testing.md) | Test-Helfer `dreego-test` |
 | [architecture.md](architecture.md) | Paketaufbau, Renderfluss, Design-Regeln |
 | [dependencies.md](dependencies.md) | gomponents, Lizenz, Attribution |
 | [deployment.md](deployment.md) | Docker, Multi-Site, Environment |

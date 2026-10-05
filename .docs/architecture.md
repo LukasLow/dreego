@@ -21,7 +21,8 @@ github.com/LukasLow/dreego/          (Repo-Root)
     │   ├── i18n/     Übersetzungen (Katalog, T, Tn)
     │   ├── markdown/ Markdown -> Nodes
     │   ├── ratelimit/ Token-Bucket-Middleware
-    │   └── urls/     Basis-Adressen je Site
+    │   ├── urls/     Basis-Adressen je Site
+    │   └── dreego-test/  Test-Client + Assertions
     └── examples/     Demo-Sites (fensterbank, portal, www, federkiel) — main
 ```
 
