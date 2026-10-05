@@ -12,14 +12,27 @@ dreego baut auf **gomponents** auf.
 
 | | |
 |---|---|
-| Modul | `maragu.dev/gomponents` |
-| Echte Quelle | https://github.com/maragudk/gomponents |
-| Version (gepinnt) | `v1.3.0` |
-| Lizenz | **MIT** — Copyright (c) Maragu AG |
+| Kanonischer Modulpfad | `maragu.dev/gomponents` (Go verlangt ihn in Imports) |
+| Echte Quelle (GitHub) | `github.com/maragudk/gomponents`, Tag **`v1.3.0`** |
+| Lizenz | **MIT** — Copyright (c) **Maragu ApS** |
 
-**Zur Domain:** `maragu.dev` ist die schöne Modul-Adresse; sie zeigt auf das
-GitHub-Repo `maragudk/gomponents`. Die kanonische Import-ID ist bewusst die
-Domain (so empfiehlt es Go), nicht die GitHub-URL.
+dreego pinnt die Quelle explizit in `v0/go.mod`:
+
+```
+require maragu.dev/gomponents v1.3.0
+replace maragu.dev/gomponents => github.com/maragudk/gomponents v1.3.0
+```
+
+**Warum beides?** Go lehnt ein Modul ab, dessen deklarierter Pfad vom
+`require` abweicht (`module declares its path as: maragu.dev/gomponents`). Der
+`require` muss also den kanonischen Pfad nennen — der `replace` zeigt den Build
+auf das echte GitHub-Repo und den Release-Tag.
+
+**Ehrliche Einschränkung:** `replace`-Zeilen gelten nur für das **Hauptmodul**.
+Für einen **Nutzer**, der dreego importiert, wird `maragu.dev/gomponents`
+weiterhin über den kanonischen Pfad aufgelöst — der seinerseits auf GitHub
+zeigt (Vanity-Pfad). Wer den GitHub-Pfad *erzwingen* will, müsste gomponents
+forken und dessen Modulpfad ändern; das wäre unüblich.
 
 **Was MIT bedeutet für dich:**
 - ✅ Verwenden, ändern, weitergeben, verkaufen.

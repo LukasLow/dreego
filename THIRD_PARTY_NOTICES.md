@@ -7,26 +7,33 @@ dependency, its license, and what it means for you.
 
 ## gomponents
 
-- **Module:** `maragu.dev/gomponents`
-- **Source:** https://github.com/maragudk/gomponents
-- **Version pinned:** `v1.3.0`
-- **License:** MIT — Copyright (c) Maragu AG
+- **Canonical module path:** `maragu.dev/gomponents` (Go requires this in imports — the declared path)
+- **Fetched from (real source):** `github.com/maragudk/gomponents`, pinned to tag **`v1.3.0`** via a `replace` directive
+- **License:** MIT — Copyright (c) **Maragu ApS**
 
-gomponents is the HTML component engine dreego builds on. dreego wraps it in
-the `dreego/dom` package (a re-export) so that a normal dreego user never has to
-import gomponents directly — but it is still there, under the hood.
+dreego builds on gomponents and pins it explicitly:
+
+```
+require maragu.dev/gomponents v1.3.0
+replace maragu.dev/gomponents => github.com/maragudk/gomponents v1.3.0
+```
+
+The canonical path must stay in imports (Go rejects a module whose declared
+path differs), so the `replace` points the build at the GitHub repository and
+the release tag. dreego wraps gomponents in the `dom` package so a normal user
+never imports it directly.
 
 **MIT means:** you may use, copy, modify, merge, publish, distribute,
 sublicense and sell it, as long as the copyright notice and this license text
 stay included. It is compatible with dreego's own MIT license. There is no
 copyleft obligation: your application does not have to be open source.
 
-The full MIT text of gompononents is reproduced below, as the license requires.
+The full MIT text of gomponents is reproduced below, as the license requires.
 
 ```
 MIT License
 
-Copyright (c) Maragu AG
+Copyright (c) Maragu ApS
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
