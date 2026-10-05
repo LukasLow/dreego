@@ -1,8 +1,7 @@
 package dreego
 
 import (
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 
 	"github.com/LukasLow/dreego/v0/pkg/scope"
 )
@@ -13,15 +12,15 @@ import (
 // The layout renders the body FIRST, so components can register their CSS and
 // JS with the collector; then it puts the collected styles in <head> and the
 // scripts at the end of <body>.
-type Layout func(c *Ctx, head g.Node, body g.Node) g.Node
+type Layout func(c *Ctx, head g.View, body g.View) g.View
 
 // defaultLayout is used when a page declares none. It is intentionally bare.
 // The head and body arguments are their *content* — scope.Document writes the
 // <head> and <body> elements itself.
-func defaultLayout(c *Ctx, head g.Node, body g.Node) g.Node {
-	kopf := g.Group([]g.Node{
-		h.Meta(h.Charset("utf-8")),
-		h.Meta(h.Name("viewport"), h.Content("width=device-width, initial-scale=1")),
+func defaultLayout(c *Ctx, head g.View, body g.View) g.View {
+	kopf := g.Group([]g.View{
+		g.Meta(g.Charset("utf-8")),
+		g.Meta(g.Name("viewport"), g.Content("width=device-width, initial-scale=1")),
 		head,
 	})
 

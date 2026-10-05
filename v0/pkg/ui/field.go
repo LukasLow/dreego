@@ -1,8 +1,7 @@
 package ui
 
 import (
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 
 	"github.com/LukasLow/dreego/v0/pkg/dreego"
 	"github.com/LukasLow/dreego/v0/pkg/scope"
@@ -14,7 +13,7 @@ import (
 //
 // value and errors come from the Form (Old/Errors); pass nil form for a fresh
 // form. The label is associated with the input via for/id (accessibility).
-func Field(c *dreego.Ctx, form *dreego.Form, name string, label string, typ string) g.Node {
+func Field(c *dreego.Ctx, form *dreego.Form, name string, label string, typ string) g.View {
 	alterWert := ""
 	var fehler []string
 	if form != nil {
@@ -31,14 +30,14 @@ func Field(c *dreego.Ctx, form *dreego.Form, name string, label string, typ stri
 .u-field input:focus { outline: none; box-shadow: 0 0 0 3px rgba(0,128,255,.20) }
 .u-field .err { color: #C62828; font-weight: 700; font-size: 13.5px; margin: 6px 0 0 }
 `),
-		h.Div(h.Class("u-field"),
-			h.Label(g.Attr("for", name), g.Text(label)),
-			h.Input(
+		g.Div(g.Class("u-field"),
+			g.Label(g.Attr("for", name), g.Text(label)),
+			g.Input(
 				g.Attr("id", name), g.Attr("name", name), g.Attr("type", typ),
 				g.Attr("value", alterWert),
 			),
-			g.Map(fehler, func(meldung string) g.Node {
-				return h.P(h.Class("err"), g.Attr("role", "alert"), g.Text(meldung))
+			g.Map(fehler, func(meldung string) g.View {
+				return g.P(g.Class("err"), g.Attr("role", "alert"), g.Text(meldung))
 			}),
 		),
 	)

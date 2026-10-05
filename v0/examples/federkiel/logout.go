@@ -16,7 +16,7 @@ var Logout = dreego.Page{
 	Post:   postLogout,
 }
 
-func getLogoutForm(c *dreego.Ctx) d.Node {
+func getLogoutForm(c *dreego.Ctx) d.View {
 	return c.Box(
 		scope.CSS(`
 .abmelden { max-width: 420px; margin: 44px auto; text-align: center }
@@ -32,7 +32,7 @@ func getLogoutForm(c *dreego.Ctx) d.Node {
 	)
 }
 
-func postLogout(c *dreego.Ctx) d.Node {
+func postLogout(c *dreego.Ctx) d.View {
 	c.DestroySession()
 	return c.Redirect("/", 303)
 }

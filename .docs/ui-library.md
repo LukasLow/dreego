@@ -63,7 +63,7 @@ Die Bibliothek ist offen. Eine neue Komponente ist einfach eine Funktion nach
 demselben Muster:
 
 ```go
-func Kpi(c *dreego.Ctx, wert string, label string) d.Node {
+func Kpi(c *dreego.Ctx, wert string, label string) d.View {
 	return c.Box(
 		dreego.CSS(`.kpi { text-align: center } .kpi b { font-size: 32px; color: #0b6b4a }`),
 		d.Div(d.Class("kpi"),

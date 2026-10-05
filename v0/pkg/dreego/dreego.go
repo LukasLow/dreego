@@ -1,9 +1,9 @@
-// Package dreego is a small Go web framework built on gomponents.
+// Package dreego is a small Go web framework built on its own dom layer.
 //
 // There is no compiler and no template language: a page is a Go value, a
 // handler is a Go function, and rendering is plain Go. The framework owns the
 // web plumbing — routing, per-request context, layouts, form binding, security
-// defaults — while the view comes from gomponents plus the scope addon
+// defaults — while the view comes from the dom layer plus the scope addon
 // (component-scoped CSS and JS).
 //
 // A minimal application:
@@ -11,7 +11,7 @@
 //	app := dreego.NewApp()
 //	app.Page(dreego.Page{
 //	    Path: "/",
-//	    Get: func(c *dreego.Ctx) g.Node {
+//	    Get: func(c *dreego.Ctx) g.View {
 //	        return c.Box(scope.CSS(`h1 { color: red }`), H1(g.Text("Hallo")))
 //	    },
 //	})

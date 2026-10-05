@@ -4,8 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 	"strings"
 
 	"github.com/LukasLow/dreego/v0/pkg/scope"
@@ -14,12 +13,12 @@ import (
 // ErrorFunc renders the complete response body for one status code. It has a
 // working Ctx (with a fresh nonce), so it can call c.Document to render inside
 // the site's layout — exactly like a normal page.
-type ErrorFunc func(c *Ctx) g.Node
+type ErrorFunc func(c *Ctx) g.View
 
 // SetErrorPage registers a custom page for a status code (404, 403, 405, 429,
 // 500, …):
 //
-//	app.SetErrorPage(404, func(c *dreego.Ctx) g.Node {
+//	app.SetErrorPage(404, func(c *dreego.Ctx) g.View {
 //	    return c.Document("de", nil, errorBox(c, "Nicht gefunden", "…"))
 //	})
 //
@@ -57,7 +56,7 @@ func (app *App) serveError(w http.ResponseWriter, r *http.Request, status int) {
 		bundle:    app.i18n,
 	}
 
-	var inhalt g.Node
+	var inhalt g.View
 	if handler, vorhanden := app.errors[status]; vorhanden {
 		inhalt = handler(ctx)
 	}
@@ -82,18 +81,18 @@ func wantsJSON(r *http.Request) bool {
 
 // fallbackErrorDocument is the built-in page used when no custom one is set.
 // It is minimal, valid and safe.
-func fallbackErrorDocument(status int) g.Node {
-	return g.Group([]g.Node{
+func fallbackErrorDocument(status int) g.View {
+	return g.Group([]g.View{
 		g.Raw("<!DOCTYPE html>"),
-		h.HTML(h.Lang("de"),
-			h.Head(
-				h.Meta(h.Charset("utf-8")),
-				h.Meta(h.Name("viewport"), h.Content("width=device-width, initial-scale=1")),
-				h.TitleEl(g.Text(http.StatusText(status))),
+		g.HTML(g.Lang("de"),
+			g.Head(
+				g.Meta(g.Charset("utf-8")),
+				g.Meta(g.Name("viewport"), g.Content("width=device-width, initial-scale=1")),
+				g.TitleEl(g.Text(http.StatusText(status))),
 			),
-			h.Body(
-				h.H1(g.Text(itoa(status)+" "+http.StatusText(status))),
-				h.P(h.A(h.Href("/"), g.Text("Zur Startseite"))),
+			g.Body(
+				g.H1(g.Text(itoa(status)+" "+http.StatusText(status))),
+				g.P(g.A(g.Href("/"), g.Text("Zur Startseite"))),
 			),
 		),
 	})

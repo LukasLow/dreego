@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	g "maragu.dev/gomponents"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 func TestAPIRouteJSON(t *testing.T) {
@@ -148,7 +148,7 @@ func TestAPIPageRendertNicht(t *testing.T) {
 	// Sicherstellen, dass eine normale Seite weiterhin HTML rendert, eine API
 	// aber nicht — beide nebeneinander.
 	app := NewApp()
-	app.Page(Page{Path: "/seite", Get: func(c *Ctx) g.Node { return g.Text("HTML") }})
+	app.Page(Page{Path: "/seite", Get: func(c *Ctx) g.View { return g.Text("HTML") }})
 	app.Page(Page{Path: "/api", API: func(c *Ctx) error { return c.Write(200, "text/plain", []byte("API")) }})
 
 	seite := httptest.NewRecorder()

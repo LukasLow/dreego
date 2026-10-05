@@ -18,7 +18,7 @@ Angaben gemäß § 5 DDG.
 E-Mail: [hallo@example.de](mailto:hallo@example.de)
 `
 
-func getImpressum(c *dreego.Ctx) d.Node {
+func getImpressum(c *dreego.Ctx) d.View {
 	return d.Main(g.Group(markdown.ToNodes(impressum)))
 }
 ```

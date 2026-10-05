@@ -14,12 +14,12 @@ var Shop = dreego.Page{
 	Path:   "/shop",
 	Layout: Shell,
 	Nav:    "shop",
-	Head:   func(c *dreego.Ctx) []d.Node { return []d.Node{d.TitleEl(d.Text("Shop — Fensterbank"))} },
+	Head:   func(c *dreego.Ctx) []d.View { return []d.View{d.TitleEl(d.Text("Shop — Fensterbank"))} },
 	Get:    getShop,
 }
 
-func getShop(c *dreego.Ctx) d.Node {
-	return d.Group([]d.Node{
+func getShop(c *dreego.Ctx) d.View {
+	return d.Group([]d.View{
 		c.Box(
 			scope.CSS(`
 .shop { padding: 34px 0 }
@@ -33,19 +33,19 @@ func getShop(c *dreego.Ctx) d.Node {
 				d.H1(d.Text("Shop")),
 				d.P(d.Class("lead"), d.Text("Beispielseite mit der Komponenten-Bibliothek dreego/ui.")),
 				d.Div(d.Class("raster"),
-					ui.Card(c, "Efeutute", d.Group([]d.Node{
+					ui.Card(c, "Efeutute", d.Group([]d.View{
 						d.P(d.Text("Wächst auch bei wenig Licht.")),
 						ui.Badge(c, "Pflegeleicht", ui.Success),
 					})),
-					ui.Card(c, "Monstera", d.Group([]d.Node{
+					ui.Card(c, "Monstera", d.Group([]d.View{
 						d.P(d.Text("Braucht etwas mehr Licht.")),
 						ui.Badge(c, "Beliebt", ui.Info),
 					})),
-					ui.Card(c, "Bogenhanf", d.Group([]d.Node{
+					ui.Card(c, "Bogenhanf", d.Group([]d.View{
 						d.P(d.Text("Extrem genügsam.")),
 						ui.Badge(c, "Wenig Wasser", ui.Info),
 					})),
-					ui.Card(c, "Zamioculcas", d.Group([]d.Node{
+					ui.Card(c, "Zamioculcas", d.Group([]d.View{
 						d.P(d.Text("Verträgt Trockenheit lange.")),
 						ui.Badge(c, "Anfänger", ui.Success),
 					})),

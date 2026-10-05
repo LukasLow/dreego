@@ -26,14 +26,14 @@ var Start = dreego.Page{
 	Path:   "/",
 	Layout: Shell,
 	Nav:    "start",
-	Head:   func(c *dreego.Ctx) []d.Node { return []d.Node{d.TitleEl(d.Text("Fensterbank — Start"))} },
+	Head:   func(c *dreego.Ctx) []d.View { return []d.View{d.TitleEl(d.Text("Fensterbank — Start"))} },
 	Get:    getStart,
 }
 
-func getStart(c *dreego.Ctx) d.Node {
+func getStart(c *dreego.Ctx) d.View {
 	sorten := []string{"Efeutute", "Bogenhanf", "Zamioculcas", "Monstera"}
 
-	return d.Group([]d.Node{
+	return d.Group([]d.View{
 		c.Box(
 			scope.CSS(`
 .hero { text-align: center; padding: 44px 16px 30px }
@@ -48,7 +48,7 @@ func getStart(c *dreego.Ctx) d.Node {
 		),
 		d.Section(
 			d.H2(d.Text(c.T("start.beliebt"))),
-			d.Ul(d.Map(sorten, func(name string) d.Node {
+			d.Ul(d.Map(sorten, func(name string) d.View {
 				// Jede Sorte verlinkt auf ihre dynamische [sorte]-Seite.
 				return d.Li(d.A(d.Href("/sorten/"+slug(name)), d.Text(name)))
 			})),
@@ -61,15 +61,15 @@ var Sorten = dreego.Page{
 	Path:   "/sorten",
 	Layout: Shell,
 	Nav:    "sorten",
-	Head:   func(c *dreego.Ctx) []d.Node { return []d.Node{d.TitleEl(d.Text("Sorten — Fensterbank"))} },
+	Head:   func(c *dreego.Ctx) []d.View { return []d.View{d.TitleEl(d.Text("Sorten — Fensterbank"))} },
 	Get:    getSorten,
 }
 
-func getSorten(c *dreego.Ctx) d.Node {
-	return d.Group([]d.Node{
+func getSorten(c *dreego.Ctx) d.View {
+	return d.Group([]d.View{
 		d.H1(d.Text(c.T("sorten.titel"))),
 		d.P(d.Text(c.T("sorten.lead"))),
-		d.Ul(d.Map(sortenListe, func(s sorte) d.Node {
+		d.Ul(d.Map(sortenListe, func(s sorte) d.View {
 			return d.Li(d.A(d.Href("/sorten/"+s.Slug), d.Text(s.Name)))
 		})),
 	})
@@ -80,21 +80,21 @@ var Sorte = dreego.Page{
 	Path:   "/sorten/[id]",
 	Layout: Shell,
 	Nav:    "sorten",
-	Head:   func(c *dreego.Ctx) []d.Node { return []d.Node{d.TitleEl(d.Text("Sorte — Fensterbank"))} },
+	Head:   func(c *dreego.Ctx) []d.View { return []d.View{d.TitleEl(d.Text("Sorte — Fensterbank"))} },
 	Get:    getSorte,
 }
 
-func getSorte(c *dreego.Ctx) d.Node {
+func getSorte(c *dreego.Ctx) d.View {
 	id := c.Param("id")
 	s, gefunden := findeSorte(id)
 	if !gefunden {
-		return d.Group([]d.Node{
+		return d.Group([]d.View{
 			d.H1(d.Text(c.T("sorte.nichtgefunden"))),
 			d.P(d.Text("Keine Sorte mit der Kennung "), d.Code(d.Text(id))),
 			d.P(d.A(d.Href("/sorten"), d.Text(c.T("sorte.zurueck")))),
 		})
 	}
-	return d.Group([]d.Node{
+	return d.Group([]d.View{
 		d.H1(d.Text(s.Name)),
 		d.P(d.Em(d.Text(s.Latein))),
 		d.P(d.Text(s.Text)),
@@ -107,16 +107,16 @@ var Pflege = dreego.Page{
 	Path:   "/pflege",
 	Layout: Shell,
 	Nav:    "pflege",
-	Head:   func(c *dreego.Ctx) []d.Node { return []d.Node{d.TitleEl(d.Text("Pflege — Fensterbank"))} },
-	Get: func(c *dreego.Ctx) d.Node {
+	Head:   func(c *dreego.Ctx) []d.View { return []d.View{d.TitleEl(d.Text("Pflege — Fensterbank"))} },
+	Get: func(c *dreego.Ctx) d.View {
 		regeln := []string{
 			"Lieber zu wenig als zu viel giessen.",
 			"Alle zwei Wochen düngen reicht.",
 			"Im Winter weniger Wasser.",
 		}
-		return d.Group([]d.Node{
+		return d.Group([]d.View{
 			d.H1(d.Text("Pflege")),
-			d.Ul(d.Map(regeln, func(r string) d.Node { return d.Li(d.Text(r)) })),
+			d.Ul(d.Map(regeln, func(r string) d.View { return d.Li(d.Text(r)) })),
 		})
 	},
 }
@@ -126,9 +126,9 @@ var Kontakt = dreego.Page{
 	Path:   "/kontakt",
 	Layout: Shell,
 	Nav:    "kontakt",
-	Head:   func(c *dreego.Ctx) []d.Node { return []d.Node{d.TitleEl(d.Text("Kontakt — Fensterbank"))} },
-	Get: func(c *dreego.Ctx) d.Node {
-		return d.Group([]d.Node{
+	Head:   func(c *dreego.Ctx) []d.View { return []d.View{d.TitleEl(d.Text("Kontakt — Fensterbank"))} },
+	Get: func(c *dreego.Ctx) d.View {
+		return d.Group([]d.View{
 			d.H1(d.Text(c.T("kontakt.titel"))),
 			d.P(d.Text(c.T("kontakt.lead")), d.Text(" "),
 				d.A(d.Href("mailto:hallo@fensterbank.example"), d.Text("hallo@fensterbank.example"))),
@@ -140,9 +140,9 @@ var Kontakt = dreego.Page{
 var Ueber = dreego.Page{
 	Path:   "/ueber",
 	Layout: Shell,
-	Head:   func(c *dreego.Ctx) []d.Node { return []d.Node{d.TitleEl(d.Text("Über — Fensterbank"))} },
-	Get: func(c *dreego.Ctx) d.Node {
-		return d.Group([]d.Node{
+	Head:   func(c *dreego.Ctx) []d.View { return []d.View{d.TitleEl(d.Text("Über — Fensterbank"))} },
+	Get: func(c *dreego.Ctx) d.View {
+		return d.Group([]d.View{
 			d.H1(d.Text("Über")),
 			d.P(d.Text("Eine Demo mit dreego: viele Seiten, dynamische Parameter, API.")),
 		})

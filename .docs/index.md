@@ -9,6 +9,7 @@ es aufgebaut ist, und wie man jede Fähigkeit benutzt.
 |---|---|
 | [overview.md](overview.md) | Was dreego ist, Idee, Abgrenzung zu Dreego/gomponents |
 | [getting-started.md](getting-started.md) | Erstes Projekt in fünf Minuten |
+| [dom.md](dom.md) | DOM-Schicht `dreego/dom`: `View`, `El`, `Attr`, htmx-Basis |
 | [routing.md](routing.md) | Seiten, Methoden, dynamische `[id]`-Routen, API-Routen |
 | [pages-and-layouts.md](pages-and-layouts.md) | `Page`, `Layout`, Head-Merge |
 | [components.md](components.md) | Komponenten = Funktionen, `c.Box`, Scoped CSS/JS |

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	g "maragu.dev/gomponents"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 // beweist: app.Use bindet eigenes Logging ein, das NICHT in dreego liegt.
@@ -23,7 +23,7 @@ func TestUseBindetEigenesLoggingEin(t *testing.T) {
 
 	app := NewApp()
 	app.Use(logging)
-	app.Page(Page{Path: "/x", Get: func(c *Ctx) g.Node { return g.Text("ok") }})
+	app.Page(Page{Path: "/x", Get: func(c *Ctx) g.View { return g.Text("ok") }})
 
 	schreiber := httptest.NewRecorder()
 	app.ServeHTTP(schreiber, httptest.NewRequest("GET", "/x", nil))
@@ -36,7 +36,7 @@ func TestUseBindetEigenesLoggingEin(t *testing.T) {
 // beweist: roher net/http-Redirect über c.Response()/c.Request() funktioniert.
 func TestRoherHTTPRedirect(t *testing.T) {
 	app := NewApp()
-	app.Page(Page{Path: "/alt", Get: func(c *Ctx) g.Node {
+	app.Page(Page{Path: "/alt", Get: func(c *Ctx) g.View {
 		http.Redirect(c.Response(), c.Request(), "/neu", http.StatusMovedPermanently)
 		return g.Text("") // nie gerendert
 	}})
@@ -56,7 +56,7 @@ func TestRoherHTTPRedirect(t *testing.T) {
 // neben eigenen Routen (z. B. einer JSON-API).
 func TestMountInEigenemMux(t *testing.T) {
 	app := NewApp()
-	app.Page(Page{Path: "/seite", Get: func(c *Ctx) g.Node { return g.Text("dreego-seite") }})
+	app.Page(Page{Path: "/seite", Get: func(c *Ctx) g.View { return g.Text("dreego-seite") }})
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/ping", func(w http.ResponseWriter, r *http.Request) {

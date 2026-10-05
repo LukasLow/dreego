@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	g "maragu.dev/gomponents"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
-func render(t *testing.T, knoten []g.Node) string {
+func render(t *testing.T, knoten []g.View) string {
 	t.Helper()
 	var puffer bytes.Buffer
 	err := g.Group(knoten).Render(&puffer)

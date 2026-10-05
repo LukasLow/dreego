@@ -6,8 +6,8 @@ import (
 	"strings"
 	"sync"
 
-	g "maragu.dev/gomponents"
-	. "maragu.dev/gomponents/html"
+	. "github.com/LukasLow/dreego/v0/pkg/dom"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 // asset is one component's scoped CSS and JS, keyed by its scope id.
@@ -77,7 +77,7 @@ func (c *Collector) add(id string, eintrag asset) {
 
 // Box registers the component's CSS and JS with the collector and returns its
 // scope container. The assets themselves are emitted once by Styles and Scripts.
-func (c *Collector) Box(parts ...g.Node) g.Node {
+func (c *Collector) Box(parts ...g.View) g.View {
 	css, js, body := splitParts(parts)
 	scopeID := shortHash(css + "\x00" + js)
 	c.add(scopeID, asset{css: css, js: js})
@@ -85,11 +85,11 @@ func (c *Collector) Box(parts ...g.Node) g.Node {
 }
 
 // Styles renders every collected stylesheet once, scoped and nonce-tagged.
-func (c *Collector) Styles() g.Node {
+func (c *Collector) Styles() g.View {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	var teile []g.Node
+	var teile []g.View
 	for _, id := range c.order {
 		eintrag := c.assets[id]
 		if strings.TrimSpace(eintrag.css) == "" {
@@ -102,11 +102,11 @@ func (c *Collector) Styles() g.Node {
 }
 
 // Scripts renders every collected script once, scoped and nonce-tagged.
-func (c *Collector) Scripts() g.Node {
+func (c *Collector) Scripts() g.View {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	var teile []g.Node
+	var teile []g.View
 	for _, id := range c.order {
 		eintrag := c.assets[id]
 		if strings.TrimSpace(eintrag.js) == "" {
@@ -118,7 +118,7 @@ func (c *Collector) Scripts() g.Node {
 }
 
 // withNonce prepends a nonce attribute when one is set. Caller holds the lock.
-func (c *Collector) withNonce(inhalt g.Node) g.Node {
+func (c *Collector) withNonce(inhalt g.View) g.View {
 	if c.nonce == "" {
 		return inhalt
 	}
@@ -144,7 +144,7 @@ func (c *Collector) AddCritical(css string) {
 
 // Critical renders the inlined critical CSS, one nonce-tagged <style> block.
 // An empty result renders nothing.
-func (c *Collector) Critical() g.Node {
+func (c *Collector) Critical() g.View {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 

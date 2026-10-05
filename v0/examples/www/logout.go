@@ -14,7 +14,7 @@ var Logout = dreego.Page{
 	Get:  getLogout,
 }
 
-func getLogout(c *dreego.Ctx) d.Node {
+func getLogout(c *dreego.Ctx) d.View {
 	c.DestroySession()
 	return c.Redirect("/", 303)
 }

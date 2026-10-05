@@ -43,13 +43,13 @@ var Impressum = dreego.Page{
 	Path:   "/impressum",
 	Layout: Shell,
 	Nav:    "impressum",
-	Head: func(c *dreego.Ctx) []d.Node {
-		return []d.Node{d.TitleEl(d.Text("Impressum — Federkiel"))}
+	Head: func(c *dreego.Ctx) []d.View {
+		return []d.View{d.TitleEl(d.Text("Impressum — Federkiel"))}
 	},
 	Get: getImpressum,
 }
 
-func getImpressum(c *dreego.Ctx) d.Node {
+func getImpressum(c *dreego.Ctx) d.View {
 	return c.Box(
 		scope.CSS(`
 .recht { max-width: 720px; margin: 34px auto }

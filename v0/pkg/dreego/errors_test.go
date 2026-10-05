@@ -6,14 +6,13 @@ import (
 	"strings"
 	"testing"
 
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 func Test404CustomHTMLPage(t *testing.T) {
 	app := NewApp()
-	app.SetErrorPage(404, func(c *Ctx) g.Node {
-		return h.H1(g.Text("NIXX-DA-404"))
+	app.SetErrorPage(404, func(c *Ctx) g.View {
+		return g.H1(g.Text("NIXX-DA-404"))
 	})
 
 	schreiber := httptest.NewRecorder()
@@ -78,7 +77,7 @@ func Test404JSONPerAcceptHeader(t *testing.T) {
 
 func Test500OhneInterneDetails(t *testing.T) {
 	app := NewApp()
-	app.Page(Page{Path: "/kaputt", Get: func(c *Ctx) g.Node {
+	app.Page(Page{Path: "/kaputt", Get: func(c *Ctx) g.View {
 		panic("GEHEIMER-INTERNER-FEHLER")
 	}})
 
@@ -95,8 +94,8 @@ func Test500OhneInterneDetails(t *testing.T) {
 
 func Test403CustomPage(t *testing.T) {
 	app := NewApp()
-	app.SetErrorPage(403, func(c *Ctx) g.Node { return h.H1(g.Text("VERBOTEN-403")) })
-	app.Page(Page{Path: "/post", Post: func(c *Ctx) g.Node { return g.Text("ok") }})
+	app.SetErrorPage(403, func(c *Ctx) g.View { return g.H1(g.Text("VERBOTEN-403")) })
+	app.Page(Page{Path: "/post", Post: func(c *Ctx) g.View { return g.Text("ok") }})
 
 	anfrage := httptest.NewRequest("POST", "/post", strings.NewReader(""))
 	anfrage.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -118,8 +117,8 @@ func Test405IstHTML(t *testing.T) {
 	app := NewApp()
 	app.Page(Page{
 		Path: "/beides",
-		Get:  func(c *Ctx) g.Node { return g.Text("g") },
-		Post: func(c *Ctx) g.Node { return g.Text("p") },
+		Get:  func(c *Ctx) g.View { return g.Text("g") },
+		Post: func(c *Ctx) g.View { return g.Text("p") },
 	})
 
 	// PUT ist nicht registriert -> der Mux meldet 405 (Muster existiert).

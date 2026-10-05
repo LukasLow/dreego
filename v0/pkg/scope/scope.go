@@ -1,10 +1,10 @@
 // Package scope is dreego's first addon: component-scoped CSS and JavaScript
-// for gomponents.
+// for the dom layer.
 //
 // A component writes its CSS and JS right next to its HTML, in the same Go
 // function:
 //
-//	func Zaehler(c *scope.Collector) g.Node {
+//	func Zaehler(c *scope.Collector) g.View {
 //	    return c.Box(
 //	        scope.CSS(`.zaehler { display: flex; gap: 12px }`),
 //	        scope.JS(`
@@ -46,13 +46,13 @@ import (
 	"io"
 	"strings"
 
-	g "maragu.dev/gomponents"
-	. "maragu.dev/gomponents/html"
+	. "github.com/LukasLow/dreego/v0/pkg/dom"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 // cssPart and jsPart are marker types. Box recognises them among its arguments
 // and pulls them out of the body, instead of rendering them in place. They
-// still implement gomponents.Node so they can be passed as arguments; used
+// still implement dom.View so they can be passed as arguments; used
 // outside Box, they render as a plain <style> / <script> without scoping.
 type cssPart string
 type jsPart string
@@ -68,19 +68,19 @@ func (teil jsPart) Render(w io.Writer) error {
 }
 
 // CSS marks a component's stylesheet. Box scopes it automatically.
-func CSS(stylesheet string) g.Node { return cssPart(stylesheet) }
+func CSS(stylesheet string) g.View { return cssPart(stylesheet) }
 
 // JS marks a component's client script. Box scopes it to the component root,
 // which is passed to the script as the variable `root`.
-func JS(script string) g.Node { return jsPart(script) }
+func JS(script string) g.View { return jsPart(script) }
 
 // Box wraps the component's parts in a scope container, emitting its CSS and JS
 // inline (no deduplication). Use the Collector's Box method for dedupe.
-func Box(parts ...g.Node) g.Node {
+func Box(parts ...g.View) g.View {
 	css, js, body := splitParts(parts)
 	scopeID := shortHash(css + "\x00" + js)
 
-	kinder := []g.Node{g.Attr("data-scope", scopeID)}
+	kinder := []g.View{g.Attr("data-scope", scopeID)}
 
 	if strings.TrimSpace(css) != "" {
 		scoped := rewriteScoped(css, `[data-scope="`+scopeID+`"]`)
@@ -98,10 +98,10 @@ func Box(parts ...g.Node) g.Node {
 
 // splitParts separates a component's parts into its stylesheet, its script and
 // its body nodes, in argument order.
-func splitParts(parts []g.Node) (string, string, []g.Node) {
+func splitParts(parts []g.View) (string, string, []g.View) {
 	var stylesheet strings.Builder
 	var script strings.Builder
-	var body []g.Node
+	var body []g.View
 
 	for _, teil := range parts {
 		switch wert := teil.(type) {

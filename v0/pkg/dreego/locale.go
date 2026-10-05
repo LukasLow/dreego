@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	g "maragu.dev/gomponents"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 
 	"github.com/LukasLow/dreego/v0/pkg/i18n"
 )
@@ -143,11 +143,11 @@ func (c *Ctx) T(key string, args ...i18n.Args) string {
 	return c.bundle.T(c.locale, key, args...)
 }
 
-// Text translates a key and returns it as a gomponents node, so it can be used
+// Text translates a key and returns it as a dom view, so it can be used
 // directly in element position:
 //
 //	H1(c.Text("start.titel"))
-func (c *Ctx) Text(key string, args ...i18n.Args) g.Node {
+func (c *Ctx) Text(key string, args ...i18n.Args) g.View {
 	return g.Text(c.T(key, args...))
 }
 

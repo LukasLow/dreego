@@ -5,8 +5,7 @@ import (
 	"crypto/subtle"
 	"encoding/base64"
 
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 // csrfSessionKey is where the CSRF token lives inside the (HttpOnly) session.
@@ -68,12 +67,12 @@ func (c *Ctx) csrfValid() bool {
 // there is no |raw anymore:
 //
 //	Form(method("post"), c.CSRFInput(), …)
-func (c *Ctx) CSRFInput() g.Node {
+func (c *Ctx) CSRFInput() g.View {
 	token := c.csrfToken()
 	if token == "" {
 		return g.Group(nil)
 	}
-	return h.Input(h.Type("hidden"), h.Name(csrfFieldName), h.Value(token))
+	return g.Input(g.Type("hidden"), g.Name(csrfFieldName), g.Value(token))
 }
 
 // neuerCSRFToken returns a fresh 128-bit random token.

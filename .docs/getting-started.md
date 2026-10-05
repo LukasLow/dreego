@@ -30,7 +30,7 @@ import (
 
 var Start = dreego.Page{
 	Path: "/",
-	Get: func(c *dreego.Ctx) d.Node {
+	Get: func(c *dreego.Ctx) d.View {
 		return c.Box(
 			dreego.CSS(`h1 { color: #0080ff }`),
 			d.H1(d.Text("Hallo dreego")),

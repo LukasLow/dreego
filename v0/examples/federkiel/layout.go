@@ -26,12 +26,12 @@ func mustReadPublic(pfad string) string {
 }
 
 // Shell ist die Hülle aller Federkiel-Seiten.
-func Shell(c *dreego.Ctx, head d.Node, body d.Node) d.Node {
+func Shell(c *dreego.Ctx, head d.View, body d.View) d.View {
 	// Das komplette Basis-CSS inline -> kein blockierender Request -> kein
 	// weisser Blitz. (scope.Collector dedupliziert es pro Seite.)
 	c.AddCritical(basisCSS)
 
-	kopf := d.Group([]d.Node{
+	kopf := d.Group([]d.View{
 		d.Meta(d.Charset("utf-8")),
 		d.Meta(d.Name("viewport"), d.Content("width=device-width, initial-scale=1")),
 		// theme-color faerbt zusaetzlich die Browser-/Systemleiste (mobil).
@@ -48,18 +48,18 @@ func Shell(c *dreego.Ctx, head d.Node, body d.Node) d.Node {
 		head,
 	})
 
-	return c.Document("de", kopf, d.Group([]d.Node{
+	return c.Document("de", kopf, d.Group([]d.View{
 		nav(c),
 		d.Main(body),
 		footer(),
 	}))
 }
 
-func nav(c *dreego.Ctx) d.Node {
+func nav(c *dreego.Ctx) d.View {
 	aktiv := c.Nav()
 
-	link := func(ziel string, text string, marke string) d.Node {
-		eigenschaften := []d.Node{d.Href(ziel), d.Text(text)}
+	link := func(ziel string, text string, marke string) d.View {
+		eigenschaften := []d.View{d.Href(ziel), d.Text(text)}
 		if aktiv == marke {
 			eigenschaften = append(eigenschaften, d.Class("on"))
 		}
@@ -77,7 +77,7 @@ func nav(c *dreego.Ctx) d.Node {
 	)
 }
 
-func footer() d.Node {
+func footer() d.View {
 	return d.Footer(
 		d.P(d.Text("Federkiel — eine erfundene Demo-App, gebaut mit dreego.")),
 	)

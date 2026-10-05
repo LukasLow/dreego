@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	g "maragu.dev/gomponents"
-	. "maragu.dev/gomponents/html"
+	. "github.com/LukasLow/dreego/v0/pkg/dom"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 func TestCollectorDedupesCss(t *testing.T) {

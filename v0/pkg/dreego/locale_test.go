@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	g "maragu.dev/gomponents"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 
 	"github.com/LukasLow/dreego/v0/pkg/i18n"
 )
@@ -73,7 +73,7 @@ func TestCtxTImHandler(t *testing.T) {
 	app := i18nTestApp()
 	var gesehen string
 	var gesehenLocale string
-	app.Page(Page{Path: "/x", Get: func(c *Ctx) g.Node {
+	app.Page(Page{Path: "/x", Get: func(c *Ctx) g.View {
 		gesehen = c.T("hallo")
 		gesehenLocale = c.Locale()
 		return g.Text(gesehen)

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"io"
 
-	g "maragu.dev/gomponents"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 // documentNode renders a full HTML document. It renders the body FIRST so that
@@ -18,8 +18,8 @@ import (
 type documentNode struct {
 	c    *Collector
 	lang string
-	head g.Node
-	body g.Node
+	head g.View
+	body g.View
 }
 
 func (dokument documentNode) Render(w io.Writer) error {
@@ -76,6 +76,6 @@ func (dokument documentNode) Render(w io.Writer) error {
 //
 //	c.AddCritical(`:root { color-scheme: light } body { background: #fffdf7 }`)
 //	page := scope.Document(c, "de", Head(TitleEl(g.Text("…"))), Body(zaehler(c)))
-func Document(c *Collector, lang string, head g.Node, body g.Node) g.Node {
+func Document(c *Collector, lang string, head g.View, body g.View) g.View {
 	return documentNode{c: c, lang: lang, head: head, body: body}
 }

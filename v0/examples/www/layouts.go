@@ -10,15 +10,15 @@ import (
 // Marketing — die Hülle der öffentlichen Seiten.
 // Der Kopf ist Inhalt (meta/title), NICHT das <head>-Element: scope.Document
 // baut <head> selbst und setzt die gesammelten Styles hinein.
-func Marketing(c *dreego.Ctx, head d.Node, body d.Node) d.Node {
-	kopf := d.Group([]d.Node{
+func Marketing(c *dreego.Ctx, head d.View, body d.View) d.View {
+	kopf := d.Group([]d.View{
 		d.Meta(d.Charset("utf-8")),
 		d.Meta(d.Name("viewport"), d.Content("width=device-width, initial-scale=1")),
 		head,
 	})
 
 	return c.Document("de", kopf,
-		d.Group([]d.Node{
+		d.Group([]d.View{
 			header(c),
 			d.Main(d.Attr("id", "main"), body),
 			footer(),
@@ -27,8 +27,8 @@ func Marketing(c *dreego.Ctx, head d.Node, body d.Node) d.Node {
 }
 
 // Auth — die schlanke Hülle der Anmeldeseiten.
-func Auth(c *dreego.Ctx, head d.Node, body d.Node) d.Node {
-	kopf := d.Group([]d.Node{
+func Auth(c *dreego.Ctx, head d.View, body d.View) d.View {
+	kopf := d.Group([]d.View{
 		d.Meta(d.Charset("utf-8")),
 		d.Meta(d.Name("viewport"), d.Content("width=device-width, initial-scale=1")),
 		head,
@@ -37,10 +37,10 @@ func Auth(c *dreego.Ctx, head d.Node, body d.Node) d.Node {
 	return c.Document("de", kopf, body)
 }
 
-func header(c *dreego.Ctx) d.Node {
+func header(c *dreego.Ctx) d.View {
 	aktiv := c.Nav()
 
-	link := func(ziel string, beschriftung string, marke string) d.Node {
+	link := func(ziel string, beschriftung string, marke string) d.View {
 		klasse := "navlink"
 		if aktiv == marke {
 			klasse += " on"
@@ -68,6 +68,6 @@ func header(c *dreego.Ctx) d.Node {
 	)
 }
 
-func footer() d.Node {
+func footer() d.View {
 	return d.Footer(d.Class("mfoot"), d.P(d.Text("dreego — Go-Webframework, ohne Compiler.")))
 }

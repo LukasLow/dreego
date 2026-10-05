@@ -8,7 +8,7 @@ var Shop = dreego.Page{
 	Layout:     Marketing,            // Hülle; ohne Angabe: defaultLayout
 	Nav:        "shop",               // aktiver Navigationspunkt (c.Nav())
 	Head:       headShop,             // Kopf-Inhalt (Titel, Meta)
-	Get:        getShop,              // GET-Handler -> d.Node
+	Get:        getShop,              // GET-Handler -> d.View
 	Post:       postShop,             // optional
 	API:        nil,                  // optional: JSON/XML statt HTML
 	Methods:    nil,                  // optional: explizite Methodenliste
@@ -21,8 +21,8 @@ var Shop = dreego.Page{
 `Head` liefert Kopf-**Inhalt** (kein `<head>`-Element — das baut das Dokument):
 
 ```go
-func headShop(c *dreego.Ctx) []d.Node {
-	return []d.Node{
+func headShop(c *dreego.Ctx) []d.View {
+	return []d.View{
 		d.TitleEl(d.Text("Shop — Beispiel")),
 		d.Meta(d.Name("description"), d.Content("…")),
 	}
@@ -37,15 +37,15 @@ ins Dokument-Titel-Element — das macht das Layout über `{head}`.
 Ein Layout ist eine Funktion `(c, head, body) Node`:
 
 ```go
-func Marketing(c *dreego.Ctx, head d.Node, body d.Node) d.Node {
-	kopf := d.Group([]d.Node{
+func Marketing(c *dreego.Ctx, head d.View, body d.View) d.View {
+	kopf := d.Group([]d.View{
 		d.Meta(d.Charset("utf-8")),
 		d.Meta(d.Name("viewport"), d.Content("width=device-width, initial-scale=1")),
 		d.Meta(d.Name("theme-color"), d.Content("#fffdf7")),
 		head,
 	})
 
-	return c.Document("de", kopf, d.Group([]d.Node{
+	return c.Document("de", kopf, d.Group([]d.View{
 		header(c),
 		d.Main(body),
 		footer(c),
@@ -64,7 +64,7 @@ Ein `<link rel="stylesheet">` blockiert das Rendern — der Browser malt weiß, 
 die Datei da ist. dreego löst das, indem das Basiscss **inline** im Kopf steht:
 
 ```go
-func Shell(c *dreego.Ctx, head d.Node, body d.Node) d.Node {
+func Shell(c *dreego.Ctx, head d.View, body d.View) d.View {
 	c.AddCritical(meinInlineCSS)   // sofort gefärbt, kein Blitz
 	…
 }

@@ -6,8 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 func flashApp(t *testing.T) *App {
@@ -16,10 +15,10 @@ func flashApp(t *testing.T) *App {
 	app.SetSessionStore(testStore(t))
 	app.Page(Page{
 		Path: "/flash",
-		Get: func(c *Ctx) g.Node {
-			return h.P(g.Text("msg=" + c.FlashGet("fehler")))
+		Get: func(c *Ctx) g.View {
+			return g.P(g.Text("msg=" + c.FlashGet("fehler")))
 		},
-		Post: func(c *Ctx) g.Node {
+		Post: func(c *Ctx) g.View {
 			c.Flash("fehler", "kaputt")
 			return Redirect("/flash", 303)
 		},

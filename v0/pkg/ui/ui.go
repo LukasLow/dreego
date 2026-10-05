@@ -1,7 +1,7 @@
 // Package ui is dreego's component library: reusable, themed building blocks.
 //
 // Every component is a Go function that takes the request context and its props,
-// and returns a gomponents node. Styling is scoped through c.Box, so two
+// and returns a dom view. Styling is scoped through c.Box, so two
 // components can use the same class names without clashing, and the CSS is
 // emitted once per page.
 //

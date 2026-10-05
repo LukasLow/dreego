@@ -3,15 +3,15 @@ package dreego
 import (
 	"net/http"
 
-	g "maragu.dev/gomponents"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 // HeadFunc builds the page's <head> contributions (title, meta, links). They
 // are merged into the layout head and deduplicated there.
-type HeadFunc func(c *Ctx) []g.Node
+type HeadFunc func(c *Ctx) []g.View
 
 // HandlerFunc renders the page body for one HTTP method.
-type HandlerFunc func(c *Ctx) g.Node
+type HandlerFunc func(c *Ctx) g.View
 
 // APIHandler responds with a non-HTML body (JSON, XML, plain text, …). It is
 // the dreego replacement for Dreego's `<server type="json">` routes.
@@ -93,7 +93,7 @@ func (seite Page) allowedMethods() string {
 }
 
 // headNode collects the page head into one node.
-func (seite Page) headNode(c *Ctx) g.Node {
+func (seite Page) headNode(c *Ctx) g.View {
 	if seite.Head == nil {
 		return g.Group(nil)
 	}

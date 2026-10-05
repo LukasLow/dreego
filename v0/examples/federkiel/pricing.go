@@ -12,13 +12,13 @@ var Pricing = dreego.Page{
 	Path:   "/pricing",
 	Layout: Shell,
 	Nav:    "pricing",
-	Head: func(c *dreego.Ctx) []d.Node {
-		return []d.Node{d.TitleEl(d.Text("Preise — Federkiel"))}
+	Head: func(c *dreego.Ctx) []d.View {
+		return []d.View{d.TitleEl(d.Text("Preise — Federkiel"))}
 	},
 	Get: getPricing,
 }
 
-func getPricing(c *dreego.Ctx) d.Node {
+func getPricing(c *dreego.Ctx) d.View {
 	return c.Box(
 		scope.CSS(`
 .preise { padding: 34px 0; text-align: center }
@@ -44,7 +44,7 @@ func getPricing(c *dreego.Ctx) d.Node {
 	)
 }
 
-func stufe(name string, preis string, punkte []string, tipp bool) d.Node {
+func stufe(name string, preis string, punkte []string, tipp bool) d.View {
 	klasse := "stufe"
 	if tipp {
 		klasse += " tipp"
@@ -52,7 +52,7 @@ func stufe(name string, preis string, punkte []string, tipp bool) d.Node {
 	return d.Div(d.Class(klasse),
 		d.H3(d.Text(name)),
 		d.P(d.Class("preis"), d.Text(preis)),
-		d.Ul(d.Map(punkte, func(punkt string) d.Node { return d.Li(d.Text(punkt)) })),
+		d.Ul(d.Map(punkte, func(punkt string) d.View { return d.Li(d.Text(punkt)) })),
 		d.A(d.Href("/login"), d.Class("btn"), d.Text("Wählen")),
 	)
 }

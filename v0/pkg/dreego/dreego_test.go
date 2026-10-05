@@ -7,8 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 func aufruf(app *App, methode string, pfad string, form string) *httptest.ResponseRecorder {
@@ -29,7 +28,7 @@ func TestPageRouting(t *testing.T) {
 	app := NewApp()
 	app.Page(Page{
 		Path: "/hallo",
-		Get:  func(c *Ctx) g.Node { return h.H1(g.Text("Hi")) },
+		Get:  func(c *Ctx) g.View { return g.H1(g.Text("Hi")) },
 	})
 
 	antwort := aufruf(app, "GET", "/hallo", "")
@@ -51,7 +50,7 @@ func TestUnbekannteRouteIst404(t *testing.T) {
 
 func TestFalscheMethodeIst405(t *testing.T) {
 	app := NewApp()
-	app.Page(Page{Path: "/x", Get: func(c *Ctx) g.Node { return g.Text("x") }})
+	app.Page(Page{Path: "/x", Get: func(c *Ctx) g.View { return g.Text("x") }})
 
 	antwort := aufruf(app, "POST", "/x", "")
 	if antwort.Code != http.StatusMethodNotAllowed {
@@ -64,7 +63,7 @@ func TestFalscheMethodeIst405(t *testing.T) {
 
 func TestRedirectIstNode(t *testing.T) {
 	app := NewApp()
-	app.Page(Page{Path: "/alt", Get: func(c *Ctx) g.Node {
+	app.Page(Page{Path: "/alt", Get: func(c *Ctx) g.View {
 		return Redirect("/neu", 303)
 	}})
 
@@ -82,7 +81,7 @@ func TestRedirectIstNode(t *testing.T) {
 
 func TestCSPNonceHeader(t *testing.T) {
 	app := NewApp()
-	app.Page(Page{Path: "/", Get: func(c *Ctx) g.Node { return g.Text("x") }})
+	app.Page(Page{Path: "/", Get: func(c *Ctx) g.View { return g.Text("x") }})
 
 	antwort := aufruf(app, "GET", "/", "")
 	csp := antwort.Header().Get("Content-Security-Policy")
@@ -98,7 +97,7 @@ func TestCtxReichtRequestUndNonce(t *testing.T) {
 	app := NewApp()
 	var gesehenNonce string
 	var gesehenPfad string
-	app.Page(Page{Path: "/c", Get: func(c *Ctx) g.Node {
+	app.Page(Page{Path: "/c", Get: func(c *Ctx) g.View {
 		gesehenNonce = c.Nonce()
 		gesehenPfad = c.Request().URL.Path
 		return g.Text("ok")
@@ -116,7 +115,7 @@ func TestCtxReichtRequestUndNonce(t *testing.T) {
 }
 
 func TestMethodenAuswahl(t *testing.T) {
-	nurGet := Page{Path: "/g", Get: func(c *Ctx) g.Node { return g.Text("g") }}
+	nurGet := Page{Path: "/g", Get: func(c *Ctx) g.View { return g.Text("g") }}
 	if nurGet.handlerFor("POST") != nil {
 		t.Fatal("POST soll nil sein")
 	}
@@ -124,7 +123,7 @@ func TestMethodenAuswahl(t *testing.T) {
 		t.Fatal("GET soll da sein")
 	}
 
-	beide := Page{Path: "/b", Get: func(c *Ctx) g.Node { return g.Text("g") }, Post: func(c *Ctx) g.Node { return g.Text("p") }}
+	beide := Page{Path: "/b", Get: func(c *Ctx) g.View { return g.Text("g") }, Post: func(c *Ctx) g.View { return g.Text("p") }}
 	if beide.handlerFor("POST") == nil {
 		t.Fatal("POST soll da sein")
 	}

@@ -9,7 +9,7 @@ import (
 
 // errorPage zeigt einen technischen Fehler als Seite. In echt wuerde das ueber
 // die Fehlermeldung laufen (infopech) — hier nur ein Minimalbeispiel.
-func errorPage(c *dreego.Ctx, ursache error) d.Node {
+func errorPage(c *dreego.Ctx, ursache error) d.View {
 	return c.Box(
 		scope.CSS(`.errbox { border: 2px solid #C62828; border-radius: 12px; padding: 18px;
                     max-width: 560px; margin: 40px auto; background: #fff }

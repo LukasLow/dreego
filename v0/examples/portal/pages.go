@@ -20,8 +20,8 @@ func Register(app *dreego.App) {
 var Start = dreego.Page{
 	Path:   "/",
 	Layout: Shell,
-	Head:   func(c *dreego.Ctx) []d.Node { return []d.Node{d.TitleEl(d.Text("Portal"))} },
-	Get: func(c *dreego.Ctx) d.Node {
+	Head:   func(c *dreego.Ctx) []d.View { return []d.View{d.TitleEl(d.Text("Portal"))} },
+	Get: func(c *dreego.Ctx) d.View {
 		if c.SessionVal("konto_email") != "" {
 			return c.Redirect(markt.Abs("/konto"), 303)
 		}
@@ -38,16 +38,16 @@ type LoginForm struct {
 var Login = dreego.Page{
 	Path:   "/login",
 	Layout: Shell,
-	Head:   func(c *dreego.Ctx) []d.Node { return []d.Node{d.TitleEl(d.Text("Anmelden — Portal"))} },
+	Head:   func(c *dreego.Ctx) []d.View { return []d.View{d.TitleEl(d.Text("Anmelden — Portal"))} },
 	Get:    getLogin,
 	Post:   postLogin,
 }
 
-func getLogin(c *dreego.Ctx) d.Node {
+func getLogin(c *dreego.Ctx) d.View {
 	return form(c, c.FlashGet("fehler"))
 }
 
-func postLogin(c *dreego.Ctx) d.Node {
+func postLogin(c *dreego.Ctx) d.View {
 	in, formWerte, err_bind := dreego.Bind[LoginForm](c)
 	if err_bind != nil || formWerte.HasErrors() {
 		c.Flash("fehler", "Bitte eine gültige E-Mail eingeben.")
@@ -57,7 +57,7 @@ func postLogin(c *dreego.Ctx) d.Node {
 	return c.Redirect(markt.Abs("/konto"), 303)
 }
 
-func form(c *dreego.Ctx, meldung string) d.Node {
+func form(c *dreego.Ctx, meldung string) d.View {
 	return c.Box(
 		scope.CSS(`
 .karte { max-width: 420px; margin: 44px auto; background: #fff; border: 2px solid #d3d9e8;
@@ -82,7 +82,7 @@ func form(c *dreego.Ctx, meldung string) d.Node {
 	)
 }
 
-func flash(meldung string) d.Node {
+func flash(meldung string) d.View {
 	if meldung == "" {
 		return d.Group(nil)
 	}
@@ -93,11 +93,11 @@ func flash(meldung string) d.Node {
 var Konto = dreego.Page{
 	Path:   "/konto",
 	Layout: Shell,
-	Head:   func(c *dreego.Ctx) []d.Node { return []d.Node{d.TitleEl(d.Text("Konto — Portal"))} },
+	Head:   func(c *dreego.Ctx) []d.View { return []d.View{d.TitleEl(d.Text("Konto — Portal"))} },
 	Get:    getKonto,
 }
 
-func getKonto(c *dreego.Ctx) d.Node {
+func getKonto(c *dreego.Ctx) d.View {
 	email := c.SessionVal("konto_email")
 	if email == "" {
 		return c.Redirect(markt.Abs("/login"), 303)
@@ -118,7 +118,7 @@ func getKonto(c *dreego.Ctx) d.Node {
 var Logout = dreego.Page{
 	Path:   "/logout",
 	Layout: Shell,
-	Get: func(c *dreego.Ctx) d.Node {
+	Get: func(c *dreego.Ctx) d.View {
 		return c.Box(
 			scope.CSS(`.karte { max-width: 420px; margin: 44px auto; text-align: center }`),
 			d.Div(d.Class("karte"),
@@ -130,7 +130,7 @@ var Logout = dreego.Page{
 			),
 		)
 	},
-	Post: func(c *dreego.Ctx) d.Node {
+	Post: func(c *dreego.Ctx) d.View {
 		c.DestroySession()
 		return c.Redirect(markt.Abs("/"), 303)
 	},

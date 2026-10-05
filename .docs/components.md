@@ -1,13 +1,13 @@
 # Komponenten (CSS + JS in einer Funktion)
 
-Eine Komponente ist eine Go-Funktion, die einen `d.Node` zurückgibt. Mit `c.Box`
+Eine Komponente ist eine Go-Funktion, die einen `d.View` zurückgibt. Mit `c.Box`
 bekommt sie HTML, CSS und JavaScript **in derselben Funktion** — gescopet,
 dedupliziert, mit CSP-Nonce.
 
 ## Beispiel
 
 ```go
-func Zaehler(c *dreego.Ctx) d.Node {
+func Zaehler(c *dreego.Ctx) d.View {
 	return c.Box(
 		dreego.CSS(`
 .zaehler { display: inline-flex; gap: 14px; border: 2px solid #0080ff; padding: 12px }
@@ -31,7 +31,7 @@ knopf.addEventListener("click", function () {
 Verwenden:
 
 ```go
-func getSeite(c *dreego.Ctx) d.Node {
+func getSeite(c *dreego.Ctx) d.View {
 	return dreego.Div( /* … */ Zaehler(c) )
 }
 ```

@@ -7,8 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 func csrfApp(t *testing.T) *App {
@@ -17,10 +16,10 @@ func csrfApp(t *testing.T) *App {
 	app.SetSessionStore(testStore(t))
 	app.Page(Page{
 		Path: "/form",
-		Get: func(c *Ctx) g.Node {
-			return h.Form(c.CSRFInput(), h.Button(g.Text("ok")))
+		Get: func(c *Ctx) g.View {
+			return g.Form(c.CSRFInput(), g.Button(g.Text("ok")))
 		},
-		Post: func(c *Ctx) g.Node { return g.Text("durchgelassen") },
+		Post: func(c *Ctx) g.View { return g.Text("durchgelassen") },
 	})
 	return app
 }
@@ -91,7 +90,7 @@ func TestCSRFLaesstGueltigenTokenDurch(t *testing.T) {
 func TestCSRFAbgeschaltet(t *testing.T) {
 	app := NewApp()
 	app.SetCSRF(false)
-	app.Page(Page{Path: "/frei", Post: func(c *Ctx) g.Node { return g.Text("ok") }})
+	app.Page(Page{Path: "/frei", Post: func(c *Ctx) g.View { return g.Text("ok") }})
 
 	anfrage := httptest.NewRequest("POST", "/frei", strings.NewReader(""))
 	anfrage.Header.Set("Content-Type", "application/x-www-form-urlencoded")

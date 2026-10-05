@@ -17,7 +17,7 @@ import (
 
 var Start = dreego.Page{
 	Path: "/",
-	Get: func(c *dreego.Ctx) d.Node {
+	Get: func(c *dreego.Ctx) d.View {
 		return c.Box(
 			dreego.CSS(`h1 { color: #0080ff }`),
 			d.H1(d.Text("Hallo dreego")),
@@ -110,6 +110,7 @@ docker compose up -d --build
 Copyleft: dreego selbst (und Änderungen daran) bleibt offen, aber deine
 Anwendung, die dreego *benutzt*, muss **nicht** offen sein.
 
-dreego baut auf **gomponents** (https://github.com/maragudk/gomponents,
-**MIT**, gepinnt `v1.3.0`) — die Attribution steht in
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+**Keine Abhängigkeiten.** dreego kompiliert mit **null** externen Modulen — nur
+Go-Standardbibliothek. Die DOM-Schicht (`pkg/dom`) ist eine eigene
+Implementierung, inspiriert von [gomponents](https://github.com/maragudk/gomponents)
+(MIT) — siehe [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

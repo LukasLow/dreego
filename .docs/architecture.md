@@ -15,7 +15,7 @@ github.com/LukasLow/dreego/          (Repo-Root)
     ├── pkg/
     │   ├── dreego/   App, Page, Ctx, Session, CSRF, Error-Pages, Static,
     │   │             Gzip, Recovery, Redirect, i18n-Anbindung  (package dreego)
-    │   ├── dom/      Re-Export von gomponents (Node, Div, Text, Class, Map, …)
+    │   ├── dom/      eigene DOM-Schicht: View, El, Attr, Text, Map + generierte Elemente/Attribute
     │   ├── scope/    Scoped CSS/JS + Collector (Dedupe, Nonce)
     │   ├── ui/       Komponenten-Bibliothek (Button, Card, Badge, Alert, Field)
     │   ├── i18n/     Übersetzungen (Katalog, T, Tn)

@@ -9,14 +9,13 @@ import (
 	"testing"
 	"testing/fstest"
 
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 func gzipApp() *App {
 	app := NewApp()
-	app.Page(Page{Path: "/", Get: func(c *Ctx) g.Node {
-		return h.P(g.Text(strings.Repeat("Hallo Welt. ", 200)))
+	app.Page(Page{Path: "/", Get: func(c *Ctx) g.View {
+		return g.P(g.Text(strings.Repeat("Hallo Welt. ", 200)))
 	}})
 	return app
 }

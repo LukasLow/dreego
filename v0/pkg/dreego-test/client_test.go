@@ -20,11 +20,11 @@ func testApp() *dreego.App {
 	app.SetCSRF(false)
 	app.Page(dreego.Page{
 		Path: "/",
-		Get:  func(c *dreego.Ctx) d.Node { return d.H1(d.Text("Hallo Welt")) },
+		Get:  func(c *dreego.Ctx) d.View { return d.H1(d.Text("Hallo Welt")) },
 	})
 	app.Page(dreego.Page{
 		Path: "/weg",
-		Get:  func(c *dreego.Ctx) d.Node { return c.Redirect("/", 303) },
+		Get:  func(c *dreego.Ctx) d.View { return c.Redirect("/", 303) },
 	})
 	app.Page(dreego.Page{
 		Path: "/echo",
@@ -61,7 +61,7 @@ func TestPostForm(t *testing.T) {
 	app.SetCSRF(false)
 	app.Page(dreego.Page{
 		Path: "/form",
-		Post: func(c *dreego.Ctx) d.Node { return d.Text("empfangen:" + c.FormValue("name")) },
+		Post: func(c *dreego.Ctx) d.View { return d.Text("empfangen:" + c.FormValue("name")) },
 	})
 	client := New(app.Handler())
 	resp := client.PostForm("/form", map[string]string{"name": "Lukas"})

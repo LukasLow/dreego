@@ -15,7 +15,7 @@ var Dashboard = dreego.Page{
 	Get:    getDashboard,
 }
 
-func getDashboard(c *dreego.Ctx) d.Node {
+func getDashboard(c *dreego.Ctx) d.View {
 	email := c.SessionVal("user_email")
 	if email == "" {
 		// Kein Login: zurück zum Formular (der Guard ist hier die Seite selbst,

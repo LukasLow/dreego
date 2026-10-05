@@ -17,7 +17,7 @@ Tags:
 ## Binden und prüfen
 
 ```go
-func postLogin(c *dreego.Ctx) d.Node {
+func postLogin(c *dreego.Ctx) d.View {
 	in, form, err_bind := dreego.Bind[LoginForm](c)
 	if err_bind != nil {
 		// kaputte Anfrage oder falsch getaggte Struktur — kein Validierungsfehler
@@ -42,7 +42,7 @@ func postLogin(c *dreego.Ctx) d.Node {
 ## Das Formular rendern
 
 ```go
-func loginForm(c *dreego.Ctx, form *dreego.Form) d.Node {
+func loginForm(c *dreego.Ctx, form *dreego.Form) d.View {
 	return d.Form(
 		d.Attr("method", "post"), d.Attr("action", "/login"),
 		c.CSRFInput(),                       // CSRF-Token (Pflicht bei POST)

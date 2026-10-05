@@ -1,8 +1,7 @@
 package ui
 
 import (
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 
 	"github.com/LukasLow/dreego/v0/pkg/dreego"
 	"github.com/LukasLow/dreego/v0/pkg/scope"
@@ -11,7 +10,7 @@ import (
 // Button renders a link styled as a button. variant is Primary or Ghost.
 //
 //	ui.Button(c, "/pricing", "Preise ansehen", ui.Primary)
-func Button(c *dreego.Ctx, href string, label string, variant Variant) g.Node {
+func Button(c *dreego.Ctx, href string, label string, variant Variant) g.View {
 	klasse := "u-btn u-btn-primary"
 	if variant == Ghost {
 		klasse = "u-btn u-btn-ghost"
@@ -27,6 +26,6 @@ func Button(c *dreego.Ctx, href string, label string, variant Variant) g.Node {
 .u-btn-ghost { background: transparent; color: #003870 }
 .u-btn-ghost:hover { background: #eef4ff }
 `),
-		h.A(h.Href(href), h.Class(klasse), g.Text(label)),
+		g.A(g.Href(href), g.Class(klasse), g.Text(label)),
 	)
 }

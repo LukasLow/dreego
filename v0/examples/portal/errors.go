@@ -9,17 +9,17 @@ import (
 
 // RegistriereFehlerseiten setzt eigene 404- und 500-Seiten im Portal-Look.
 func RegistriereFehlerseiten(app *dreego.App) {
-	app.SetErrorPage(404, func(c *dreego.Ctx) d.Node {
+	app.SetErrorPage(404, func(c *dreego.Ctx) d.View {
 		return fehlerSeite(c, 404, "Nicht gefunden",
 			"Diese Adresse gehört nicht zum Portal.")
 	})
-	app.SetErrorPage(500, func(c *dreego.Ctx) d.Node {
+	app.SetErrorPage(500, func(c *dreego.Ctx) d.View {
 		return fehlerSeite(c, 500, "Etwas ging schief",
 			"Bitte später noch einmal versuchen.")
 	})
 }
 
-func fehlerSeite(c *dreego.Ctx, status int, titel string, text string) d.Node {
+func fehlerSeite(c *dreego.Ctx, status int, titel string, text string) d.View {
 	inhalt := c.Box(
 		scope.CSS(`
 .fehler { max-width: 520px; margin: 48px auto; text-align: center }

@@ -18,24 +18,24 @@ func mustRead(pfad string) string {
 }
 
 // Shell ist die Hülle aller Portal-Seiten.
-func Shell(c *dreego.Ctx, head d.Node, body d.Node) d.Node {
+func Shell(c *dreego.Ctx, head d.View, body d.View) d.View {
 	c.AddCritical(basisCSS)
 
-	kopf := d.Group([]d.Node{
+	kopf := d.Group([]d.View{
 		d.Meta(d.Charset("utf-8")),
 		d.Meta(d.Name("viewport"), d.Content("width=device-width, initial-scale=1")),
 		d.Meta(d.Name("theme-color"), d.Content("#eef1f6")),
 		head,
 	})
 
-	return c.Document("de", kopf, d.Group([]d.Node{
+	return c.Document("de", kopf, d.Group([]d.View{
 		nav(c),
 		d.Main(body),
 		fuss(),
 	}))
 }
 
-func nav(c *dreego.Ctx) d.Node {
+func nav(c *dreego.Ctx) d.View {
 	// Cross-Site-Link über den urls-Helfer: absolute Adresse zur öffentlichen
 	// Site (anderer Port), nicht relativ.
 	return d.Header(d.Class("kopf"),
@@ -48,7 +48,7 @@ func nav(c *dreego.Ctx) d.Node {
 	)
 }
 
-func fuss() d.Node {
+func fuss() d.View {
 	return d.Footer(d.Class("fuss"),
 		d.P(d.Text("Portal — zweite Site der Demo (eigener Port), gebaut mit dreego.")))
 }

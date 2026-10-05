@@ -24,27 +24,27 @@ func mustRead(pfad string) string {
 }
 
 // Shell ist die Hülle aller Seiten.
-func Shell(c *dreego.Ctx, head d.Node, body d.Node) d.Node {
+func Shell(c *dreego.Ctx, head d.View, body d.View) d.View {
 	c.AddCritical(basisCSS)
 
-	kopf := d.Group([]d.Node{
+	kopf := d.Group([]d.View{
 		d.Meta(d.Charset("utf-8")),
 		d.Meta(d.Name("viewport"), d.Content("width=device-width, initial-scale=1")),
 		d.Meta(d.Name("theme-color"), d.Content("#f2f7f4")),
 		head,
 	})
 
-	return c.Document("de", kopf, d.Group([]d.Node{
+	return c.Document("de", kopf, d.Group([]d.View{
 		nav(c),
 		d.Main(body),
 		fuss(c),
 	}))
 }
 
-func nav(c *dreego.Ctx) d.Node {
+func nav(c *dreego.Ctx) d.View {
 	aktiv := c.Nav()
-	link := func(ziel, text, marke string) d.Node {
-		eigenschaften := []d.Node{d.Href(ziel), d.Text(text)}
+	link := func(ziel, text, marke string) d.View {
+		eigenschaften := []d.View{d.Href(ziel), d.Text(text)}
 		if aktiv == marke {
 			eigenschaften = append(eigenschaften, d.Class("on"))
 		}
@@ -63,6 +63,6 @@ func nav(c *dreego.Ctx) d.Node {
 	)
 }
 
-func fuss(c *dreego.Ctx) d.Node {
+func fuss(c *dreego.Ctx) d.View {
 	return d.Footer(d.Class("fuss"), d.P(d.Text(c.T("fuss"))))
 }

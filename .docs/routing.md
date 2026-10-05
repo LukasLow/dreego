@@ -8,7 +8,7 @@ var Pricing = dreego.Page{
 	Get:  getPricing,
 }
 
-func getPricing(c *dreego.Ctx) d.Node {
+func getPricing(c *dreego.Ctx) d.View {
 	return d.H1(d.Text("Preise"))
 }
 ```
@@ -43,7 +43,7 @@ Ein Segment in eckigen Klammern wird zum Pfad-Parameter:
 ```go
 var Project = dreego.Page{
 	Path: "/projekte/[id]",
-	Get: func(c *dreego.Ctx) d.Node {
+	Get: func(c *dreego.Ctx) d.View {
 		id := c.Param("id")          // "abc-123"
 		return d.H1(d.Text("Projekt " + id))
 	},

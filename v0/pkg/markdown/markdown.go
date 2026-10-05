@@ -1,5 +1,5 @@
-// Package markdown renders a small, safe subset of Markdown to gomponents
-// nodes. It exists so legal pages (Impressum, Datenschutz, AGB) can be written
+// Package markdown renders a small, safe subset of Markdown to dom views.
+// It exists so legal pages (Impressum, Datenschutz, AGB) can be written
 // as text and rendered as HTML — the dreego replacement for Dreego's
 // `<body lang="md">`.
 //
@@ -11,15 +11,14 @@ package markdown
 import (
 	"strings"
 
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
-// ToNodes parses Markdown text into a slice of gomponents nodes.
-func ToNodes(quelle string) []g.Node {
+// ToNodes parses Markdown text into a slice of dom nodes.
+func ToNodes(quelle string) []g.View {
 	zeilen := strings.Split(strings.ReplaceAll(quelle, "\r\n", "\n"), "\n")
 
-	var knoten []g.Node
+	var knoten []g.View
 	var absatz []string
 
 	abschlussAbsatz := func() {
@@ -27,7 +26,7 @@ func ToNodes(quelle string) []g.Node {
 			return
 		}
 		text := strings.Join(absatz, " ")
-		knoten = append(knoten, h.P(inline(text)))
+		knoten = append(knoten, g.P(inline(text)))
 		absatz = absatz[:0]
 	}
 
@@ -44,7 +43,7 @@ func ToNodes(quelle string) []g.Node {
 		// Horizontale Linie.
 		if gekuerzt == "---" || gekuerzt == "***" {
 			abschlussAbsatz()
-			knoten = append(knoten, h.Hr())
+			knoten = append(knoten, g.Hr())
 			continue
 		}
 
@@ -60,8 +59,8 @@ func ToNodes(quelle string) []g.Node {
 		if istListenpunkt(gekuerzt) {
 			abschlussAbsatz()
 			eintraege, verbraucht := sammleListe(zeilen, index)
-			knoten = append(knoten, h.Ul(g.Map(eintraege, func(eintrag string) g.Node {
-				return h.Li(inline(eintrag))
+			knoten = append(knoten, g.Ul(g.Map(eintraege, func(eintrag string) g.View {
+				return g.Li(inline(eintrag))
 			})))
 			index += verbraucht - 1
 			continue
@@ -70,7 +69,7 @@ func ToNodes(quelle string) []g.Node {
 		// Zitat: >
 		if strings.HasPrefix(gekuerzt, "> ") {
 			abschlussAbsatz()
-			knoten = append(knoten, h.BlockQuote(inline(strings.TrimPrefix(gekuerzt, "> "))))
+			knoten = append(knoten, g.BlockQuote(inline(strings.TrimPrefix(gekuerzt, "> "))))
 			continue
 		}
 
@@ -124,21 +123,21 @@ func ueberschriftStufe(zeile string) int {
 	return stufe
 }
 
-func ueberschrift(stufe int, text string) g.Node {
+func ueberschrift(stufe int, text string) g.View {
 	inhalt := inline(text)
 	switch stufe {
 	case 1:
-		return h.H1(inhalt)
+		return g.H1(inhalt)
 	case 2:
-		return h.H2(inhalt)
+		return g.H2(inhalt)
 	case 3:
-		return h.H3(inhalt)
+		return g.H3(inhalt)
 	case 4:
-		return h.H4(inhalt)
+		return g.H4(inhalt)
 	case 5:
-		return h.H5(inhalt)
+		return g.H5(inhalt)
 	default:
-		return h.H6(inhalt)
+		return g.H6(inhalt)
 	}
 }
 
@@ -167,12 +166,12 @@ func sammleListe(zeilen []string, start int) ([]string, int) {
 }
 
 // inline parses inline Markdown (**bold**, *italic*, `code`, [text](url)).
-func inline(text string) g.Node {
+func inline(text string) g.View {
 	return g.Group(inlineNodes(text))
 }
 
-func inlineNodes(text string) []g.Node {
-	var knoten []g.Node
+func inlineNodes(text string) []g.View {
+	var knoten []g.View
 	puffer := strings.Builder{}
 
 	absaugen := func() {
@@ -190,7 +189,7 @@ func inlineNodes(text string) []g.Node {
 		if rest[0] == '`' {
 			if ende := strings.IndexByte(rest[1:], '`'); ende >= 0 {
 				absaugen()
-				knoten = append(knoten, h.Code(g.Text(rest[1:1+ende])))
+				knoten = append(knoten, g.Code(g.Text(rest[1:1+ende])))
 				index += ende + 2
 				continue
 			}
@@ -200,7 +199,7 @@ func inlineNodes(text string) []g.Node {
 		if strings.HasPrefix(rest, "**") {
 			if ende := strings.Index(rest[2:], "**"); ende >= 0 {
 				absaugen()
-				knoten = append(knoten, h.Strong(g.Text(rest[2:2+ende])))
+				knoten = append(knoten, g.Strong(g.Text(rest[2:2+ende])))
 				index += ende + 4
 				continue
 			}
@@ -210,7 +209,7 @@ func inlineNodes(text string) []g.Node {
 		if rest[0] == '*' {
 			if ende := strings.IndexByte(rest[1:], '*'); ende >= 0 {
 				absaugen()
-				knoten = append(knoten, h.Em(g.Text(rest[1:1+ende])))
+				knoten = append(knoten, g.Em(g.Text(rest[1:1+ende])))
 				index += ende + 2
 				continue
 			}
@@ -226,7 +225,7 @@ func inlineNodes(text string) []g.Node {
 						label := rest[1:textEnde]
 						ziel := nachBracket[1:urlEnde]
 						if sichererLink(ziel) {
-							knoten = append(knoten, h.A(h.Href(ziel), g.Text(label)))
+							knoten = append(knoten, g.A(g.Href(ziel), g.Text(label)))
 						} else {
 							// Unsicheres Schema (z.B. javascript:): nur als Text.
 							knoten = append(knoten, g.Text(label))

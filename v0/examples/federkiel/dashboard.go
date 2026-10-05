@@ -15,7 +15,7 @@ var Dashboard = dreego.Page{
 	Get:    getDashboard,
 }
 
-func getDashboard(c *dreego.Ctx) d.Node {
+func getDashboard(c *dreego.Ctx) d.View {
 	email := c.SessionVal("autorin_email")
 	if email == "" {
 		return c.Redirect("/login", 303)

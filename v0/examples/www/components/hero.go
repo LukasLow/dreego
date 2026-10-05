@@ -12,7 +12,7 @@ import (
 
 // Hero — Startseiten-Kopf mit CSS und einem kleinen Client-Skript in EINER
 // Funktion. Das Skript bekommt den Komponenten-Root als `root`.
-func Hero(c *dreego.Ctx) d.Node {
+func Hero(c *dreego.Ctx) d.View {
 	return c.Box(
 		scope.CSS(`
 .hero { text-align: center; padding: 48px 20px }

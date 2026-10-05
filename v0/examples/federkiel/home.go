@@ -13,8 +13,8 @@ var Home = dreego.Page{
 	Path:   "/",
 	Layout: Shell,
 	Nav:    "home",
-	Head: func(c *dreego.Ctx) []d.Node {
-		return []d.Node{
+	Head: func(c *dreego.Ctx) []d.View {
+		return []d.View{
 			d.TitleEl(d.Text("Federkiel — schreiben ohne Ablenkung")),
 			d.Meta(d.Name("description"), d.Content("Die ablenkungsfreie Schreib-App für Romanautorinnen.")),
 		}
@@ -22,8 +22,8 @@ var Home = dreego.Page{
 	Get: getHome,
 }
 
-func getHome(c *dreego.Ctx) d.Node {
-	return d.Group([]d.Node{
+func getHome(c *dreego.Ctx) d.View {
+	return d.Group([]d.View{
 		c.Box(
 			scope.CSS(`
 .hero { text-align: center; padding: 56px 16px 40px }

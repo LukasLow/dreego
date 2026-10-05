@@ -19,7 +19,7 @@ import (
 )
 
 // hero — CSS neben dem HTML.
-func hero(c *scope.Collector) g.Node {
+func hero(c *scope.Collector) g.View {
 	return c.Box(
 		scope.CSS(`
 .hero { text-align: center; padding: 40px 0 }
@@ -35,7 +35,7 @@ func hero(c *scope.Collector) g.Node {
 }
 
 // karte — dieselbe Klasse .hero, bleibt aber unberuehrt (beweist Scoping).
-func karte(c *scope.Collector) g.Node {
+func karte(c *scope.Collector) g.View {
 	return c.Box(
 		scope.CSS(`
 .hero { text-align: left; padding: 12px; border: 2px dashed #0080ff }
@@ -48,7 +48,7 @@ func karte(c *scope.Collector) g.Node {
 
 // zaehler — HTML + CSS + JS in EINER Funktion. Dank Collector wird das CSS nur
 // einmal ausgegeben, auch wenn die Komponente zweimal auf der Seite steht.
-func zaehler(c *scope.Collector) g.Node {
+func zaehler(c *scope.Collector) g.View {
 	return c.Box(
 		scope.CSS(`
 .zaehler { display: inline-flex; align-items: center; gap: 14px;
@@ -77,7 +77,7 @@ minus.addEventListener('click', function () {
 	)
 }
 
-func seite(c *scope.Collector) g.Node {
+func seite(c *scope.Collector) g.View {
 	body := Body(
 		hero(c),
 		karte(c),

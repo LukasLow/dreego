@@ -22,12 +22,12 @@ var Login = dreego.Page{
 	Post:   postLogin,
 }
 
-func getLogin(c *dreego.Ctx) d.Node {
+func getLogin(c *dreego.Ctx) d.View {
 	// Flash aus dem vorherigen POST (PRG) — genau einmal sichtbar.
 	return loginForm(c, nil, c.FlashGet("login_error"))
 }
 
-func postLogin(c *dreego.Ctx) d.Node {
+func postLogin(c *dreego.Ctx) d.View {
 	in, form, err_bind := dreego.Bind[LoginForm](c)
 	if err_bind != nil {
 		c.Flash("login_error", "Bitte Eingaben prüfen.")
@@ -46,7 +46,7 @@ func postLogin(c *dreego.Ctx) d.Node {
 	return c.Redirect("/dashboard", 303)
 }
 
-func loginForm(c *dreego.Ctx, form *dreego.Form, meldung string) d.Node {
+func loginForm(c *dreego.Ctx, form *dreego.Form, meldung string) d.View {
 	return c.Box(
 		scope.CSS(`
 .authcard { max-width: 440px; margin: 40px auto; border: 2px solid #0080ff;
@@ -74,7 +74,7 @@ func loginForm(c *dreego.Ctx, form *dreego.Form, meldung string) d.Node {
 }
 
 // formField rendert ein Feld mit Old-Wert und Fehlermeldungen.
-func formField(form *dreego.Form, name string, typ string, label string) d.Node {
+func formField(form *dreego.Form, name string, typ string, label string) d.View {
 	alterWert := ""
 	var fehler []string
 	if form != nil {
@@ -82,17 +82,17 @@ func formField(form *dreego.Form, name string, typ string, label string) d.Node 
 		fehler = form.Errors(name)
 	}
 
-	return d.Group([]d.Node{
+	return d.Group([]d.View{
 		d.Label(d.Attr("for", name), d.Text(label)),
 		d.Input(d.Attr("id", name), d.Attr("name", name), d.Attr("type", typ),
 			d.Attr("value", alterWert)),
-		d.Map(fehler, func(meldung string) d.Node {
+		d.Map(fehler, func(meldung string) d.View {
 			return d.P(d.Class("err"), d.Attr("role", "alert"), d.Text(meldung))
 		}),
 	})
 }
 
-func flashBox(meldung string) d.Node {
+func flashBox(meldung string) d.View {
 	if meldung == "" {
 		return d.Group(nil)
 	}

@@ -6,13 +6,13 @@ nackter Text. Für API-Wege kommt JSON.
 ## Eigene Seite registrieren
 
 ```go
-app.SetErrorPage(404, func(c *dreego.Ctx) d.Node {
+app.SetErrorPage(404, func(c *dreego.Ctx) d.View {
 	return c.Document("de",
 		d.TitleEl(d.Text("Nicht gefunden")),
 		fehlerInhalt(c, 404, "Nicht gefunden", "Diese Seite gibt es nicht."),
 	)
 })
-app.SetErrorPage(500, func(c *dreego.Ctx) d.Node { … })
+app.SetErrorPage(500, func(c *dreego.Ctx) d.View { … })
 ```
 
 Pro Status (404, 403, 405, 429, 500, …) ein Handler. Er bekommt einen voll

@@ -7,13 +7,12 @@ import (
 	"strings"
 	"testing"
 
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 func TestRedirectKlemmtUngueltigenCode(t *testing.T) {
 	app := NewApp()
-	app.Page(Page{Path: "/r", Get: func(c *Ctx) g.Node { return Redirect("/ziel", 0) }})
+	app.Page(Page{Path: "/r", Get: func(c *Ctx) g.View { return Redirect("/ziel", 0) }})
 
 	schreiber := httptest.NewRecorder()
 	app.ServeHTTP(schreiber, httptest.NewRequest("GET", "/r", nil))
@@ -27,7 +26,7 @@ func TestCSRFohneStoreFehlerNicht403(t *testing.T) {
 	// CSRF an, aber kein Store: unsicherer Request muss als Serverfehler
 	// enden (laut), nicht als 403 (irreführend) — und nicht durchgelassen.
 	app := NewApp()
-	app.Page(Page{Path: "/p", Post: func(c *Ctx) g.Node { return g.Text("ok") }})
+	app.Page(Page{Path: "/p", Post: func(c *Ctx) g.View { return g.Text("ok") }})
 
 	anfrage := httptest.NewRequest("POST", "/p", strings.NewReader(""))
 	anfrage.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -42,7 +41,7 @@ func TestCSRFohneStoreFehlerNicht403(t *testing.T) {
 func TestCSRFausOhneStore(t *testing.T) {
 	app := NewApp()
 	app.SetCSRF(false)
-	app.Page(Page{Path: "/p", Post: func(c *Ctx) g.Node { return g.Text("ok") }})
+	app.Page(Page{Path: "/p", Post: func(c *Ctx) g.View { return g.Text("ok") }})
 
 	anfrage := httptest.NewRequest("POST", "/p", strings.NewReader(""))
 	anfrage.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -57,9 +56,9 @@ func TestCSRFausOhneStore(t *testing.T) {
 func TestGrosseSessionMeldetFehler(t *testing.T) {
 	app := NewApp()
 	app.SetSessionStore(testStore(t))
-	app.Page(Page{Path: "/gross", Get: func(c *Ctx) g.Node {
+	app.Page(Page{Path: "/gross", Get: func(c *Ctx) g.View {
 		c.SetSessionVal("riesig", strings.Repeat("x", 8000))
-		return h.P(g.Text("ok"))
+		return g.P(g.Text("ok"))
 	}})
 
 	schreiber := httptest.NewRecorder()
@@ -72,7 +71,7 @@ func TestGrosseSessionMeldetFehler(t *testing.T) {
 
 func TestFormActionUndCSP(t *testing.T) {
 	app := NewApp()
-	app.Page(Page{Path: "/", Get: func(c *Ctx) g.Node { return g.Text("x") }})
+	app.Page(Page{Path: "/", Get: func(c *Ctx) g.View { return g.Text("x") }})
 
 	schreiber := httptest.NewRecorder()
 	app.ServeHTTP(schreiber, httptest.NewRequest("GET", "/", nil))

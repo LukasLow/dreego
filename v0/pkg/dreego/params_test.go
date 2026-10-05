@@ -6,14 +6,14 @@ import (
 	"strings"
 	"testing"
 
-	g "maragu.dev/gomponents"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 )
 
 func TestParamEinSegment(t *testing.T) {
 	app := NewApp()
 	app.Page(Page{
 		Path: "/projekte/[id]",
-		Get:  func(c *Ctx) g.Node { return g.Text("id=" + c.Param("id")) },
+		Get:  func(c *Ctx) g.View { return g.Text("id=" + c.Param("id")) },
 	})
 
 	schreiber := httptest.NewRecorder()
@@ -28,7 +28,7 @@ func TestParamZweiSegmente(t *testing.T) {
 	app := NewApp()
 	app.Page(Page{
 		Path: "/projekte/[id]/aufgaben/[aufgabe]",
-		Get: func(c *Ctx) g.Node {
+		Get: func(c *Ctx) g.View {
 			return g.Text(c.Param("id") + ":" + c.Param("aufgabe"))
 		},
 	})
@@ -45,7 +45,7 @@ func TestCatchAllRest(t *testing.T) {
 	app := NewApp()
 	app.Page(Page{
 		Path: "/dateien/[...pfad]",
-		Get:  func(c *Ctx) g.Node { return g.Text("rest=" + c.Param("pfad")) },
+		Get:  func(c *Ctx) g.View { return g.Text("rest=" + c.Param("pfad")) },
 	})
 
 	schreiber := httptest.NewRecorder()
@@ -58,8 +58,8 @@ func TestCatchAllRest(t *testing.T) {
 
 func TestFesteUndDynamischeRoutenNeben(t *testing.T) {
 	app := NewApp()
-	app.Page(Page{Path: "/projekte/neu", Get: func(c *Ctx) g.Node { return g.Text("NEU") }})
-	app.Page(Page{Path: "/projekte/[id]", Get: func(c *Ctx) g.Node { return g.Text("ID=" + c.Param("id")) }})
+	app.Page(Page{Path: "/projekte/neu", Get: func(c *Ctx) g.View { return g.Text("NEU") }})
+	app.Page(Page{Path: "/projekte/[id]", Get: func(c *Ctx) g.View { return g.Text("ID=" + c.Param("id")) }})
 
 	// Fester Pfad gewinnt (Go-1.22-Mux bevorzugt den spezifischeren Treffer).
 	fest := httptest.NewRecorder()
@@ -77,7 +77,7 @@ func TestFesteUndDynamischeRoutenNeben(t *testing.T) {
 
 func TestUnbekannterPfad404(t *testing.T) {
 	app := NewApp()
-	app.Page(Page{Path: "/a/[id]", Get: func(c *Ctx) g.Node { return g.Text("x") }})
+	app.Page(Page{Path: "/a/[id]", Get: func(c *Ctx) g.View { return g.Text("x") }})
 
 	schreiber := httptest.NewRecorder()
 	app.ServeHTTP(schreiber, httptest.NewRequest("GET", "/voellig/anders", nil))

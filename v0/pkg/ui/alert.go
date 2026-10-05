@@ -1,8 +1,7 @@
 package ui
 
 import (
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 
 	"github.com/LukasLow/dreego/v0/pkg/dreego"
 	"github.com/LukasLow/dreego/v0/pkg/scope"
@@ -13,7 +12,7 @@ import (
 // readers announce it correctly.
 //
 //	ui.Alert(c, "Bitte Eingaben prüfen.", ui.Danger)
-func Alert(c *dreego.Ctx, message string, tone Tone) g.Node {
+func Alert(c *dreego.Ctx, message string, tone Tone) g.View {
 	klasse := "u-alert u-alert-info"
 	role := "status"
 	switch tone {
@@ -35,6 +34,6 @@ func Alert(c *dreego.Ctx, message string, tone Tone) g.Node {
 .u-alert-warning { background: #fff4e0; border-color: #E8820C; color: #8a5000 }
 .u-alert-danger { background: #fdecec; border-color: #C62828; color: #9c1c1c }
 `),
-		h.P(h.Class(klasse), g.Attr("role", role), g.Text(message)),
+		g.P(g.Class(klasse), g.Attr("role", role), g.Text(message)),
 	)
 }

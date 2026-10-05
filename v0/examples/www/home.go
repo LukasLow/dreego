@@ -16,15 +16,15 @@ var Home = dreego.Page{
 	Get:    getHome,
 }
 
-func headHome(c *dreego.Ctx) []d.Node {
-	return []d.Node{
+func headHome(c *dreego.Ctx) []d.View {
+	return []d.View{
 		d.TitleEl(d.Text("dreego — Startseite")),
 		d.Meta(d.Name("description"), d.Content("Eine Seite, gebaut mit dreego.")),
 	}
 }
 
-func getHome(c *dreego.Ctx) d.Node {
-	return d.Group([]d.Node{
+func getHome(c *dreego.Ctx) d.View {
+	return d.Group([]d.View{
 		components.Hero(c),
 		d.Section(d.Class("wrap"),
 			d.H2(d.Text("Sicherheit")),

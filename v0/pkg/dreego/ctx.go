@@ -3,7 +3,7 @@ package dreego
 import (
 	"net/http"
 
-	g "maragu.dev/gomponents"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 
 	"github.com/LukasLow/dreego/v0/pkg/i18n"
 	"github.com/LukasLow/dreego/v0/pkg/scope"
@@ -80,10 +80,10 @@ func (c *Ctx) AddCritical(css string) { c.collector.AddCritical(css) }
 // Components use it so their CSS and JS is emitted once per page, with the CSP
 // nonce:
 //
-//	func Card(c *dreego.Ctx) g.Node {
+//	func Card(c *dreego.Ctx) g.View {
 //	    return c.Box(scope.CSS(`.card { … }`), Div(Class("card"), …))
 //	}
-func (c *Ctx) Box(parts ...g.Node) g.Node { return c.collector.Box(parts...) }
+func (c *Ctx) Box(parts ...g.View) g.View { return c.collector.Box(parts...) }
 
 // Nav returns the active navigation marker declared on the page.
 func (c *Ctx) Nav() string { return c.page.Nav }
@@ -94,14 +94,14 @@ func (c *Ctx) FormValue(name string) string { return c.r.FormValue(name) }
 // Param returns a dynamic path value from a [name] segment:
 //
 //	var Project = dreego.Page{Path: "/projekte/[id]", Get: getProject}
-//	func getProject(c *dreego.Ctx) g.Node { id := c.Param("id") }
+//	func getProject(c *dreego.Ctx) g.View { id := c.Param("id") }
 func (c *Ctx) Param(name string) string { return c.r.PathValue(name) }
 
 // Redirect returns a Node that redirects the client. Typical use is the
 // Post/Redirect/Get pattern. It is a method so it reads naturally on the ctx:
 //
 //	return c.Redirect("/auth/login", 303)
-func (c *Ctx) Redirect(url string, code int) g.Node { return Redirect(url, code) }
+func (c *Ctx) Redirect(url string, code int) g.View { return Redirect(url, code) }
 
 // sessionGet reads a value from the in-memory session.
 func (c *Ctx) sessionGet(key string) string { return c.session[key] }

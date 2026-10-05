@@ -9,10 +9,10 @@ import (
 
 // RegistriereFehlerseiten setzt eigene 404- und 500-Seiten im Fensterbank-Look.
 func RegistriereFehlerseiten(app *dreego.App) {
-	app.SetErrorPage(404, func(c *dreego.Ctx) d.Node {
+	app.SetErrorPage(404, func(c *dreego.Ctx) d.View {
 		return fehlerSeite(c, 404, c.T("fehler.404.titel"), c.T("fehler.404.text"))
 	})
-	app.SetErrorPage(500, func(c *dreego.Ctx) d.Node {
+	app.SetErrorPage(500, func(c *dreego.Ctx) d.View {
 		return fehlerSeite(c, 500, "Etwas ging schief",
 			"Wir konnten die Seite nicht laden. Bitte später noch einmal versuchen.")
 	})
@@ -20,7 +20,7 @@ func RegistriereFehlerseiten(app *dreego.App) {
 
 // fehlerSeite rendert eine Fehlerseite IN der Site-Hülle (Shell), damit sie
 // aussieht wie die normale Website — kein nackter Text, kein Layoutbruch.
-func fehlerSeite(c *dreego.Ctx, status int, titel string, text string) d.Node {
+func fehlerSeite(c *dreego.Ctx, status int, titel string, text string) d.View {
 	inhalt := c.Box(
 		scope.CSS(`
 .fehler { max-width: 560px; margin: 48px auto; text-align: center }

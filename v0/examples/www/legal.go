@@ -39,7 +39,7 @@ var Legal = dreego.Page{
 	Get:    getLegal,
 }
 
-func getLegal(c *dreego.Ctx) d.Node {
+func getLegal(c *dreego.Ctx) d.View {
 	return c.Box(
 		scope.CSS(`
 .legal { max-width: 720px; margin: 30px auto; padding: 0 18px }

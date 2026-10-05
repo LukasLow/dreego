@@ -1,8 +1,7 @@
 package ui
 
 import (
-	g "maragu.dev/gomponents"
-	h "maragu.dev/gomponents/html"
+	g "github.com/LukasLow/dreego/v0/pkg/dom"
 
 	"github.com/LukasLow/dreego/v0/pkg/dreego"
 	"github.com/LukasLow/dreego/v0/pkg/scope"
@@ -11,7 +10,7 @@ import (
 // Badge renders a small status label. tone is Info, Success, Warning or Danger.
 //
 //	ui.Badge(c, "Aktiv", ui.Success)
-func Badge(c *dreego.Ctx, text string, tone Tone) g.Node {
+func Badge(c *dreego.Ctx, text string, tone Tone) g.View {
 	klasse := "u-badge u-badge-info"
 	switch tone {
 	case Success:
@@ -31,6 +30,6 @@ func Badge(c *dreego.Ctx, text string, tone Tone) g.Node {
 .u-badge-warning { background: #fff4e0; color: #8a5000; border-color: #E8820C }
 .u-badge-danger { background: #fdecec; color: #9c1c1c; border-color: #C62828 }
 `),
-		h.Span(h.Class(klasse), g.Text(text)),
+		g.Span(g.Class(klasse), g.Text(text)),
 	)
 }

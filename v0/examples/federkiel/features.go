@@ -12,8 +12,8 @@ var Features = dreego.Page{
 	Path:   "/features",
 	Layout: Shell,
 	Nav:    "features",
-	Head: func(c *dreego.Ctx) []d.Node {
-		return []d.Node{d.TitleEl(d.Text("Funktionen — Federkiel"))}
+	Head: func(c *dreego.Ctx) []d.View {
+		return []d.View{d.TitleEl(d.Text("Funktionen — Federkiel"))}
 	},
 	Get: getFeatures,
 }
@@ -23,7 +23,7 @@ type funktion struct {
 	text  string
 }
 
-func getFeatures(c *dreego.Ctx) d.Node {
+func getFeatures(c *dreego.Ctx) d.View {
 	posten := []funktion{
 		{"Fokus-Modus", "Keine Benachrichtigungen, kein Zähler, nur die Seite."},
 		{"Kapitel-Ordner", "Ordne Szenen, Figuren und Notizen nach Kapiteln."},
@@ -48,7 +48,7 @@ func getFeatures(c *dreego.Ctx) d.Node {
 			d.H1(d.Text("Funktionen")),
 			d.P(d.Class("lead"), d.Text("Sechs Dinge, die Federkiel bewusst einfach hält.")),
 			d.Div(d.Class("karten"),
-				d.Map(posten, func(posten funktion) d.Node {
+				d.Map(posten, func(posten funktion) d.View {
 					return d.Div(d.Class("karte"),
 						d.H3(d.Text(posten.titel)),
 						d.P(d.Text(posten.text)),
