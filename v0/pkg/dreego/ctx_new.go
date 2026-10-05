@@ -22,6 +22,7 @@ func NewCtx(r *http.Request) *Ctx {
 		collector: collector,
 		locale:    "de",
 		session:   map[string]string{},
+		data:      map[string]any{},
 	}
 }
 

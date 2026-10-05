@@ -117,6 +117,10 @@ func Bind[T any](c *Ctx) (T, *Form, error) {
 		validateField(form, name, roh, feldTyp.Tag.Get("validate"))
 	}
 
+	// Attach the form to the request context, so c.Old / c.Err work in any
+	// component without threading the form through every call.
+	c.SetForm(form)
+
 	return leer, form, nil
 }
 

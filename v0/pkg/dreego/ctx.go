@@ -36,6 +36,12 @@ type Ctx struct {
 	session      map[string]string
 	sessionDirty bool
 	sessionError error
+
+	// data is the per-request state bag (Set/Get/Data).
+	data map[string]any
+
+	// form holds parsed form values + errors (Old/Err) after Bind.
+	form *Form
 }
 
 // newCtx loads the session for a request.
@@ -56,6 +62,7 @@ func newCtx(w http.ResponseWriter, r *http.Request, seite Page, store *CookieSto
 		locale:      locale,
 		bundle:      bundle,
 		session:     session,
+		data:        map[string]any{},
 	}
 }
 
