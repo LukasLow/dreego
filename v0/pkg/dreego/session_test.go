@@ -22,6 +22,39 @@ func TestSecretZuKurz(t *testing.T) {
 	}
 }
 
+func TestCookieMaxAge(t *testing.T) {
+	store := testStore(t)
+	store.SetCookiePolicy(CookiePolicy{MaxAge: Days(30)})
+
+	schreiber := httptest.NewRecorder()
+	anfrage := httptest.NewRequest("GET", "/", nil)
+	err_set := store.Set(schreiber, anfrage, "user", "lukas")
+	if err_set != nil {
+		t.Fatalf("set: %v", err_set)
+	}
+
+	cookie := schreiber.Result().Cookies()[0]
+	if cookie.MaxAge != 30*24*60*60 {
+		t.Fatalf("MaxAge = %d, erwartet 2592000", cookie.MaxAge)
+	}
+	if cookie.Expires.IsZero() {
+		t.Fatal("Expires soll gesetzt sein")
+	}
+}
+
+func TestCookieOhneMaxAgeIstSessionCookie(t *testing.T) {
+	store := testStore(t)
+
+	schreiber := httptest.NewRecorder()
+	anfrage := httptest.NewRequest("GET", "/", nil)
+	_ = store.Set(schreiber, anfrage, "user", "lukas")
+
+	cookie := schreiber.Result().Cookies()[0]
+	if cookie.MaxAge != 0 || !cookie.Expires.IsZero() {
+		t.Fatalf("ohne MaxAge muss das Cookie ein Session-Cookie sein")
+	}
+}
+
 func TestSessionRoundTrip(t *testing.T) {
 	store := testStore(t)
 	schreiber := httptest.NewRecorder()

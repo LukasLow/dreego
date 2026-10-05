@@ -31,11 +31,21 @@ type Collector struct {
 	// stylesheet, so the first paint already has the base colours and font.
 	critical     []string
 	criticalSeen map[string]bool
+
+	// pageCSS holds raw, page-level CSS that is not tied to a component scope
+	// (e.g. a dynamic width computed per request). It is emitted in <head>
+	// verbatim, nonce-tagged and deduplicated.
+	pageCSS     []string
+	pageCSSSeen map[string]bool
 }
 
 // New returns a fresh, empty Collector — one per request.
 func New() *Collector {
-	return &Collector{assets: map[string]asset{}, criticalSeen: map[string]bool{}}
+	return &Collector{
+		assets:       map[string]asset{},
+		criticalSeen: map[string]bool{},
+		pageCSSSeen:  map[string]bool{},
+	}
 }
 
 // SetNonce sets the CSP nonce that every emitted <style> and <script> carries.
@@ -154,6 +164,44 @@ func (c *Collector) Critical() g.View {
 
 	var baukasten strings.Builder
 	for _, block := range c.critical {
+		baukasten.WriteString(block)
+		baukasten.WriteByte('\n')
+	}
+
+	return StyleEl(c.withNonce(g.Raw(escapeClosingTag(baukasten.String(), "style"))))
+}
+
+// AddPageCSS registers raw, page-level CSS (not component-scoped) to be
+// emitted once in <head>, nonce-tagged. Duplicate blocks are ignored. Use it
+// for per-request values that must not live in a style="…" attribute, which the
+// CSP blocks:
+//
+//	cls := c.AddPageCSS(".fill { width: 42% }")
+func (c *Collector) AddPageCSS(css string) {
+	if strings.TrimSpace(css) == "" {
+		return
+	}
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if c.pageCSSSeen[css] {
+		return
+	}
+	c.pageCSSSeen[css] = true
+	c.pageCSS = append(c.pageCSS, css)
+}
+
+// PageCSS renders the collected page-level CSS as one nonce-tagged <style>
+// block (empty if none).
+func (c *Collector) PageCSS() g.View {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	if len(c.pageCSS) == 0 {
+		return g.Group(nil)
+	}
+
+	var baukasten strings.Builder
+	for _, block := range c.pageCSS {
 		baukasten.WriteString(block)
 		baukasten.WriteByte('\n')
 	}

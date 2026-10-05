@@ -12,6 +12,7 @@ import (
 	"net"
 	"net/http"
 	"strings"
+	"time"
 )
 
 // ErrSecretTooShort is returned by NewCookieStore when the secret is too short.
@@ -31,7 +32,23 @@ type CookiePolicy struct {
 	// Secure marks the cookie Secure. It is OR-ed with the request's TLS state,
 	// so a TLS request always gets a Secure cookie.
 	Secure bool
+	// MaxAge makes the session cookie persistent. Zero keeps it a plain session
+	// cookie (gone when the browser closes). When set, both Max-Age and Expires
+	// are written. Use the Days/Hours/Minutes helpers:
+	//
+	//	store.SetCookiePolicy(CookiePolicy{MaxAge: Days(30)})
+	MaxAge time.Duration
 }
+
+// Days returns n days as a Duration. Go has no time.Day constant (only up to
+// time.Hour), so this keeps long cookie lifetimes readable.
+func Days(n int) time.Duration { return time.Duration(n) * 24 * time.Hour }
+
+// Hours returns n hours as a Duration.
+func Hours(n int) time.Duration { return time.Duration(n) * time.Hour }
+
+// Minutes returns n minutes as a Duration.
+func Minutes(n int) time.Duration { return time.Duration(n) * time.Minute }
 
 // DefaultCookiePolicy returns secure defaults: HttpOnly, SameSite=Lax, Path=/.
 func DefaultCookiePolicy() CookiePolicy {
@@ -101,6 +118,9 @@ func (store *CookieStore) SetCookiePolicy(policy CookiePolicy) {
 	}
 	if policy.SameSite != 0 {
 		zusammen.SameSite = policy.SameSite
+	}
+	if policy.MaxAge > 0 {
+		zusammen.MaxAge = policy.MaxAge
 	}
 	// HttpOnly und Secure können nur ANgeschaltet werden, nie ab.
 	zusammen.HttpOnly = store.policy.HttpOnly || policy.HttpOnly
@@ -189,14 +209,23 @@ func (store *CookieStore) write(w http.ResponseWriter, r *http.Request, daten ma
 		return ErrSessionTooLarge
 	}
 
-	http.SetCookie(w, &http.Cookie{
+	cookie := &http.Cookie{
 		Name:     store.policy.Name,
 		Value:    wert,
 		Path:     store.policy.Path,
 		HttpOnly: store.policy.HttpOnly,
 		SameSite: store.policy.SameSite,
 		Secure:   store.isSecure(r),
-	})
+	}
+
+	// A positive MaxAge makes the cookie persistent: both Max-Age and Expires
+	// are written, so old browsers (and every modern one) agree on the lifetime.
+	if store.policy.MaxAge > 0 {
+		cookie.MaxAge = int(store.policy.MaxAge.Seconds())
+		cookie.Expires = time.Now().Add(store.policy.MaxAge)
+	}
+
+	http.SetCookie(w, cookie)
 
 	return nil
 }

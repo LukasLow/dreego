@@ -94,6 +94,7 @@ Abhängigkeiten, Deployment.
 ```sh
 cd v0/examples/fensterbank && DREEGO_DEV=1 go run . -port 4000
 cd v0/examples/portal       && DREEGO_DEV=1 go run . -port 4001
+cd v0/examples/multisite    && DREEGO_DEV=1 go run .    # zwei Sites, ein Prozess (:4100, :4101)
 ```
 
 Oder per Docker:

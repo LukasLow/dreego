@@ -47,35 +47,28 @@ Welche Site gebaut wird, steuert `--build-arg CMD=./sites/<name>`.
 
 ## Mehrere Sites (mehrere Ports)
 
-Eine „Site" ist eine eigene `dreego.NewApp()` mit eigenem Handler und eigenem
-Port — wie Statuna (www :3000, app :3001, link :3002). Cross-Links über
-`dreego/urls`, dev/prod nur per Environment.
+Eine „Site" ist eine eigene `dreego.NewApp()` mit eigenem Handler. `dreego.Start`
+startet sie sofort im Hintergrund (nicht blockierend), `Wait` blockiert und
+meldet den ersten Fehler — so laufen mehrere Sites in EINEM Prozess, wie Statuna
+(www :3000, app :3001, link :3002). Cross-Links über `dreego/urls`.
 
-`docker-compose.yml` startet zwei Sites:
+```go
+public := dreego.Start(":3000", wwwApp.Handler())
+app := dreego.Start(":3001", appApp.Handler())
 
-```yaml
-services:
-  fensterbank:
-    build: { context: ., args: { CMD: ./v0/examples/fensterbank } }
-    command: ["-port", "4000"]
-    ports: ["4000:4000"]
-    environment:
-      DREEGO_SESSION_SECRET: "…≥32 Zeichen…"
-      PORTAL_URL: "http://localhost:4001"
-  portal:
-    build: { context: ., args: { CMD: ./v0/examples/portal } }
-    command: ["-port", "4001"]
-    ports: ["4001:4001"]
-    environment:
-      DREEGO_SESSION_SECRET: "…anderes Secret…"
-      FENSTERBANK_URL: "http://localhost:4000"
+if err := public.Wait(); err != nil {
+    log.Fatalf("www: %v", err)
+}
+if err := app.Wait(); err != nil {
+    log.Fatalf("app: %v", err)
+}
 ```
 
-```
-docker compose up -d --build
-# http://localhost:4000  (Fensterbank)
-# http://localhost:4001  (Portal)
-```
+Ein vollständiges, lauffähiges Beispiel liegt unter
+`v0/examples/multisite` (zwei Apps, zwei Ports, Cross-Link).
+
+`docker-compose.yml` startet zwei Demo-Container (je eine Site); für den
+Ein-Prozess-Fall genügt ein Container mit mehreren `Start`-Aufrufen.
 
 ## Hinter einem Reverse-Proxy (Traefik)
 

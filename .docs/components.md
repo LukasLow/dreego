@@ -55,6 +55,14 @@ func getSeite(c *dreego.Ctx) d.View {
   Inline-Style-Attribute. Layout gehört in eine gescopte CSS-Klasse. (Die
   Komponenten-Bibliothek hält sich daran; ein Browser-Check hat genau diesen
   Fehler einmal aufgedeckt.)
+- **Dynamische Werte → `c.Style`.** Wenn ein Wert erst zur Laufzeit feststeht
+  (z. B. eine Balkenbreite), erzeugt `c.Style("width: 42%")` eine nonce'd
+  `<style>`-Regel und gibt einen Klassennamen zurück — kein Inline-Attribut:
+
+  ```go
+  cls := c.Style("width: " + strconv.Itoa(percent) + "%")
+  d.Div(d.Class("fill "+cls))
+  ```
 - **`CSS`/`JS` sind Nodes**, keine Strings mit Sonderbehandlung.
 
 ## Wann eine eigene Komponente?

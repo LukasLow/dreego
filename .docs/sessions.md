@@ -22,6 +22,17 @@ Eigenschaften:
 - **HttpOnly**, **SameSite=Lax**, **Secure** bei TLS/trusted Proxy.
 - Größenlimit 4096 Bytes (Cookie-Grenze). Zu groß → Serverfehler, nicht stiller
   Verlust.
+- **Lebensdauer** über `CookiePolicy.MaxAge` (Default `0` = Session-Cookie).
+  Positive Werte setzen **Max-Age und Expires**. Dauer-Helfer:
+  `dreego.Days(30)`, `dreego.Hours(12)`, `dreego.Minutes(90)` (Go kennt keine
+  `time.Day`-Konstante).
+
+```go
+store.SetCookiePolicy(dreego.CookiePolicy{
+    SameSite: http.SameSiteLaxMode,
+    MaxAge:   dreego.Days(30),   // 30 Tage „eingeloggt bleiben"
+})
+```
 
 ## Werte lesen/schreiben
 

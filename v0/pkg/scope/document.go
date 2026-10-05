@@ -46,6 +46,11 @@ func (dokument documentNode) Render(w io.Writer) error {
 		return err_critical
 	}
 
+	err_page := dokument.c.PageCSS().Render(&ausgabe)
+	if err_page != nil {
+		return err_page
+	}
+
 	err_styles := dokument.c.Styles().Render(&ausgabe)
 	if err_styles != nil {
 		return err_styles
