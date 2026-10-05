@@ -46,6 +46,10 @@ func DefaultSecurity() Security { return Security{CSP: StrictCSP} }
 // Security use this; without it, the strict default applies.
 func (app *App) SetSecurity(s Security) { app.security = &s }
 
+// HasSecurity reports whether the app has an explicit security policy (set via
+// SetSecurity/SetCSP). It is false when the strict default still applies.
+func (app *App) HasSecurity() bool { return app.security != nil }
+
 // SetCSP is a convenience for the common case: it sets only the CSP app-wide.
 func (app *App) SetCSP(csp string) { app.SetSecurity(Security{CSP: csp}) }
 

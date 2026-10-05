@@ -112,3 +112,9 @@ geht nur ins Server-Log, nie an den Client.
 
 Sichere Vorgaben sind **Defaults**, keine Fesseln: jede lässt sich bewusst
 ändern — mit klarer Ansage im Code.
+
+## Bewusst offen / spätere Phase
+
+- Ein **Audit-Log** für Security-Ereignisse fehlt noch.
+- **Subresource Integrity (SRI)** für externe Assets fehlt.
+- **Wails/Desktop** als eigener Adapter (braucht die CSP-Steuerung, die es nun gibt).

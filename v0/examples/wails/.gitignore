@@ -1,0 +1,8 @@
+bin/
+build/bin/
+.task/
+.DS_Store
+
+# Wails-generated bindings are committed on purpose (so a checkout can
+# type-check / serve them), but a local build directory is not.
+build/bin/
