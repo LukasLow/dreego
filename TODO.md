@@ -234,3 +234,60 @@ FLIP-Helfer) vs. nur Doku/Beispiel. Bewusst **keine** Svelte-artige
 Animation-Runtime (würde die Philosophie brechen). Prüfen: `prefers-reduced-motion`
 respektieren.
 
+**Demo-Erkenntnis (gebaut, nicht committet):** Zwei Varianten zeigen die Grenze —
+- **Basis (reines HTML/CSS):** Staggered Entrance (`@keyframes`+`delay`), Hover
+  Lift (`transform`+`shadow`), Progress/`box-shadow`-Pulse, CSS-only Accordion
+  (`:checked`+`max-height`). Alles 0 JS, aber **Exit-Animationen** sind zäh (nur
+  über `@starting-style` + `transition-behavior: allow-discrete`).
+- **Fancy:** FLIP-Reorder (First–Last–Invert–Play über `getBoundingClientRect` +
+  `element.animate`, echtes `animate:flip`-Äquivalent ohne Runtime), View
+  Transitions (Morphing), Cursor-Glow (CSS-Variablen + `mousemove`),
+  Scroll-Reveal (`animation-timeline: view()`), Endlos-Marquee.
+- **Fazit der Demo:** Je „fancy“ (Morphing mehrerer Elemente, Federn/Springs,
+  orchestrierte Timelines), desto mehr wünscht man sich eine Lib/Micro-Runtime.
+
+### Plugin-System mit Micro-Runtime
+**Idee:** dreego bleibt zero-dep im Kern, aber Plugins dürfen optional eine
+**Micro-Runtime** mitliefern (z. B. Animationen, Signals, htmx). Jedes Plugin
+registriert sich beim Start und kann eigene Assets (JS/CSS), Routen und
+`scope`-Erweiterungen beitragen.
+
+**Zu klären:**
+- Plugin-Interface: `Register(app)` + `Assets()`, `Middleware()`, `Head()`,
+  Version/Abhängigkeiten.
+- Asset-Beitrag: koppelt an Asset-Bundling (siehe oben) — Plugin-JS wird Teil
+  des Bundles oder ein eigener Chunk.
+- Runtime-Grenzen: eine mitgelieferte Runtime darf den Kern nicht zwingen; sie
+  lädt nur, wenn das Plugin sie aktiv braucht (sonst ist dreegos „no runtime“-Vorteil weg).
+- Sicherheit: Plugins sind Code mit voller App-Rechte — Vertrauensmodell nötig.
+- Reihenfolge/Lebenszyklus, Doppel-Registrierung, Deaktivieren pro App.
+
+### Signals / Reaktivität (Micro-Runtime)
+**Idee:** feingranulare Reaktivität — ändert sich eine Variable, aktualisieren
+sich **alle** Stellen im Frontend, die sie verwenden. Klassisch eine
+Micro-Runtime (`signal()` + Effekt + DOM-Bindung, wie SolidJS/Svelte-Runes,
+Vorbild Preact Signals).
+
+**Warum es liegt:** bricht das Kernmodell. dreego ist server-gerendert ohne
+Runtime und ohne Keyed-Reconciliation; Signals brauchen genau das. Als **Opt-in
+Plugin** denkbar, aber bewusst nicht im Kern.
+
+**Zu klären:** Größe der Runtime, Interop mit `scope.JS`-Komponenten,
+SSR/Re-Hydration (Server-Wert → Client-Signal), Bundle-Kosten.
+
+### „Ist dreego dann auf React/Svelte-Niveau?“ — Bestandsaufnahme
+Nach Signals/Animationen/Plugin-System fehlt zum Gleichstand immer noch:
+- **Reaktives Komponenten-/State-Modell** (Signals/Props/Events) — React/Svelte
+  Kern, bei dreego nur als Plugin.
+- **Client-seitiges Routing** + Daten-/State-Management (Stores, Suspense/Loading).
+- **Komponenten-Lifecycle & Composition** (Fragmente, Slots statt Go-Args).
+- **Ökosystem:** Form-Bibliotheken, UI-Kits, DevTools, SSR-Frameworks (Next/SvelteKit).
+- **Öffnen/Schließen von Schleifen:** dreego ist bewusst **Hypermedia-first**
+  (Server rendert), nicht ein Client-Renderer. „Gleichstand“ wäre nur über
+  zugekaufte Runtimes erreichbar — und würde den Kernvorteil (kein Build, kein
+  Runtime, kleine Payload) aufgeben.
+
+**Einordnung:** dreego ist **nicht** „React/Svelte kleiner“, sondern eine andere
+Klasse (server-gerenderte Hypermedia wie Rails+Hotwire/Django+htmx). Die
+Feature-Parität entsteht durch **Client-Additionen**, nicht durch den Kern.
+
