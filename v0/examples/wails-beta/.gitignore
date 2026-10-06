@@ -1,0 +1,15 @@
+.task
+bin
+build/linux/appimage/build
+build/windows/nsis/MicrosoftEdgeWebview2Setup.exe
+# Mobile generated (per-machine; overlays hold absolute paths)
+build/ios/xcode/
+build/android/overlay.json
+build/android/gen/
+# Generated Wails bindings (recreated by `wails3 generate bindings`)
+frontend/static/bindings/
+# Icons generated from build/appicon.png by `wails3 generate icons`
+build/darwin/icons.icns
+build/windows/icon.ico
+build/darwin/Assets.car
+.DS_Store
