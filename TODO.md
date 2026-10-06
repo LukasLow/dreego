@@ -164,10 +164,73 @@ Statistik?), Consent-Persistenz, Opt-in/Opt-out.
   Utility-CSS-Verbot (AGENTS.md) und dem „no build step"-Prinzip. Eher
   nicht bauen; als bewusste Alternative/Entscheidung festhalten.
 
-### Weitere Ideen
-- `/ready`-Endpunkt, Logging-Middleware, `SafeURL`/`SafeScript` (bereits oben).
-- CSP-Report-only-Modus + Report-Endpoint (`report-to`) für Rollout.
-- Signed URLs / CSRF für Static-Cache-Invalidierung.
-- Health-/Metrics-Addon (Prometheus-Textformat), zero-dependency.
-- `d.i18n`-Lücken: Plural-Regeln, Datums-/Zahlenformat (de-DE).
+### Sicherheits-Härtung — Erweiterungen
+Ergänzend zur Liste oben (COOP/CORP/COEP, Trusted Types, Host-Header-Prüfung,
+security.txt, Session-Fixation/-Revocation, Content-Type-Pflicht,
+`MaxHeaderBytes`, Trusted-Proxy-IP, Audit-Log, HMAC-signierter State):
+
+- **COOP/CORP/COEP:** `Cross-Origin-Opener-Policy: same-origin`,
+  `Cross-Origin-Resource-Policy: same-origin` (ggf. `same-site`), optional
+  `Cross-Origin-Embedder-Policy: require-corp` → Prozess-Isolation (Spectre).
+- **Trusted Types:** `require-trusted-types-for 'script'` in der CSP, wo JS DOM
+  schreibt — macht DOM-XSS strukturell unmöglich (Browser-Support beachten).
+- **Host-Header-Validierung:** erlaubte Hosts prüfen → Host-Header-Injection &
+  Cache-Poisoning hinter Proxy verhindern.
+- **Content-Type-Pflicht** für POST/PUT/PATCH: fehlend/falsch → ablehnen.
+- **Trusted-Proxy-IP:** Client-IP nur aus `X-Forwarded-For` lesen, wenn
+  RemoteAddr im Trusted-Set liegt (sonst IP-Spoofing im Rate-Limit).
+- **Session-Fixation:** Session bei Login/Privilegienwechsel rotieren.
+- **Audit-Log:** einheitliches Log für sicherheitsrelevante Events
+  (Login, Consent, Löschung) → DSGVO-Nachweis.
+- **security.txt:** Helfer für `/.well-known/security.txt`.
+
+### Fehlende Kern-Fähigkeiten
+- **Server-Session-Store:** heute nur Cookie mit hartem 4-KB-Limit; optionaler
+  In-Memory/DB-Store → beliebig groß + „überall abmelden" (Revocation).
+- **Uploads / Multipart:** fehlt komplett — Größenlimit je Feld, Streaming in
+  Temp/Storage, sichere Dateinamen, MIME-Prüfung.
+- **CORS-Helfer** (`app.SetCORS`) für `API:`-Endpunkte (preflight, Origins,
+  Credentials).
+- **ETag / Conditional GET (304)** für Static und gerenderte Seiten.
+- **Graceful `Shutdown(ctx)`** neben `Close()`.
+- **Request-ID + strukturiertes Logging** (Observability).
+- **Streaming-HTML:** `documentNode` puffert alles → chunked Rendering.
+
+### Dev-Ergonomie
+- **CLI `dreego new`:** Scaffold im Statuna-Layout (`APP_/COMP_/PAGE_`,
+  www/app/link, Store, Layouts).
+- **OpenAPI aus `API:`-Seiten:** Typen/Validierung sind da → Spec + Client.
+- **Config-Loader `env`:** typisiert, fehlende Pflichtwerte brechen den Start ab.
+- **Meta-/OG-Helfer:** Title, Description, Open Graph, Twitter-Card, JSON-LD.
+- **robots / sitemap** aus registrierten Seiten erzeugen.
+- **i18n:** Plural-Regeln + `de-DE` Datums-/Zahlenformat.
+- **`/ready`-Endpunkt**, Logging-Middleware, `SafeURL`/`SafeScript` (oben).
+- **Health-/Metrics-Addon** (Prometheus-Textformat), zero-dependency.
+- **CSP report-only** + Report-Endpoint (`report-to`) für Rollout.
+
+### Animationen (View Transitions statt Animation-Runtime)
+**Frage:** Svelte hat `svelte/transition` und `svelte/animate` (fade, fly, slide,
+`animate:flip` in keyed each). Direkt übernehmbar ist das **nicht**: Svelte
+braucht dafür seinen reaktiven Runtime + Keyed-Diffing, um „rein/raus" zu
+erkennen. dreego hat keinen Client-Runtime und kein Reconciliation — der Server
+liefert HTML, der Browser fügt Knoten ein/aus.
+
+**Was dreego-idiomatisch geht (zero-dep):**
+1. **CSS-Transitions/-Keyframes** — scoped über `scope.CSS`; deckt Fade, Slide,
+   Hover, Entrance/Exit, `@starting-style` + `transition-behavior: allow-discrete`.
+2. **View Transitions API** (der große Hebel) — browsernativ, MPA **und**
+   Fragment-Swaps: `@view-transition { navigation: auto }` bzw.
+   `document.startViewTransition(...)`; mit htmx kombinierbar
+   (`hx-swap="outerHTML transition:true"`). SPA-artige Übergänge **ohne** Framework.
+3. **FLIP-Helfer** (≈40 Zeilen JS als `scope.JS`-Komponente): First–Last–Invert–Play
+   über `getBoundingClientRect` — Svelte-`animate:flip`-Äquivalent für Listen,
+   das der Browser ohne Runtime ausführt.
+4. **Scroll-driven Animations** (`animation-timeline: scroll()/view()`) — rein CSS,
+   sehr effektvoll, kein JS.
+5. **Web Animations API / Mini-Helfer** für komplexe Fälle (statt Motion-One-Dep).
+
+**Zu entscheiden:** ein `dreego/anim`-Addon (CSS-Keyframes-Helfer + optionaler
+FLIP-Helfer) vs. nur Doku/Beispiel. Bewusst **keine** Svelte-artige
+Animation-Runtime (würde die Philosophie brechen). Prüfen: `prefers-reduced-motion`
+respektieren.
 
